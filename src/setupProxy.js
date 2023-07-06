@@ -2,7 +2,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
   app.use(
-    "/v4/games/",
+    "/v4/games",
     createProxyMiddleware({
       target: "https://api.igdb.com",
       changeOrigin: true,
@@ -16,14 +16,35 @@ module.exports = function (app) {
     })
   );
   app.use(
-    "https://api.igdb.com/v4/screenshots",
+    "/v4/screenshots",
     createProxyMiddleware({
       target: "https://api.igdb.com",
       changeOrigin: true,
     })
   );
   app.use(
-    "https://api.igdb.com/v4/language_supports",
+    "/v4/language_supports",
+    createProxyMiddleware({
+      target: "https://api.igdb.com",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/v4/games/count",
+    createProxyMiddleware({
+      target: "https://api.igdb.com",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/v4/release_dates/",
+    createProxyMiddleware({
+      target: "https://api.igdb.com",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/v4/covers",
     createProxyMiddleware({
       target: "https://api.igdb.com",
       changeOrigin: true,

@@ -1,35 +1,31 @@
 import { Route, Routes } from "react-router-dom";
 import Main from "./Main";
 import Detailpage from "./component/DetailPage/Detailpage";
-import { useEffect } from "react";
-import axios from "axios";
-const Client_id = process.env.REACT_APP_CLIENT_ID;
-const Secret_key = process.env.REACT_APP_SECRET_KEY;
-const Client_token = process.env.REACT_APP_CLIENT_TOKEN;
+import { createContext, useEffect, useState } from "react";
+import { returnDataType } from "./dataFetch/getVideoHook";
+import { videoDataFetch } from "./dataFetch/getVideoHook";
+import { gamesearch } from "./dataFetch/getVideoHook";
+import { gamesortUp } from "./dataFetch/getVideoHook";
+import { CoverDataFetch } from "./dataFetch/getVideoHook";
+import { gameScreenShotSearch } from "./dataFetch/getVideoHook";
+import "./dataFetch/getVideoHook";
+
+let date = new Date(1688655600000);
+console.log(date);
+let d = Date.parse("2023/07/07/");
+console.log(d);
+// gamesort();
+// gameScreenShotSearch(241450);
+CoverDataFetch(255676);
+export const UserContext = createContext<returnDataType>([]);
 
 function App() {
   useEffect(() => {
-    var myHeaders = new Headers();
-    myHeaders.append("Client-ID", `${Client_id}`);
-    myHeaders.append("Authorization", `Bearer ${Client_token}`);
-    myHeaders.append("Content-Type", "application/json");
-    const dataFetch = () => {
-      fetch("/v4/game_videos", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Client-ID": `${Client_id}`,
-          Authorization: `Bearer ${Client_token}`,
-        },
-        body: "fields *; ",
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    dataFetch();
+    gamesortUp()
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
   }, []);
   return (
     <Routes>
