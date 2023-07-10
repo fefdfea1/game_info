@@ -5,10 +5,14 @@ import { searchDataType } from "../dataFetch/getGameData";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../App";
+import { useInView } from "react-intersection-observer";
+import Youtube from "react-youtube";
+
 export default function MainPageVideo() {
   const selector = useSelector((state: RootState) => state.counter1);
   const [searchData, setSearch] = useState<searchDataType[]>([]);
   const [loadingState, setState] = useState<Boolean>(false);
+  const [ref, inView] = useInView();
 
   const getVideoData = useGetVideoUrl(
     selector.Nowunix,
@@ -17,12 +21,23 @@ export default function MainPageVideo() {
   );
 
   useEffect(() => {
-    if (getVideoData) {
-      setSearch(getVideoData);
+    if (inView) {
+      console.log("asdfsdf");
     }
+  }, [inView]);
+
+  useEffect(() => {
+    if (getVideoData !== undefined) {
+      if (selector.gameData.length > 1) {
+        setSearch(getVideoData);
+      } else {
+        setSearch(getVideoData);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getVideoData]);
 
-  if (getVideoData === undefined) return <></>;
+  if (getVideoData === undefined) return null;
   return (
     <>
       <VideoAreaContainer className="videoAreaContainer">
@@ -31,15 +46,24 @@ export default function MainPageVideo() {
             const hasVideoUrl = item.hasOwnProperty("videos");
             if (searchData.length > 1) {
               return (
-                <VideoContainer className="videoContainer" key={index}>
+                <VideoContainer className="videoContainer" key={item.name}>
                   <Link to={`/${index}`}>
                     <VideoBox>
                       {hasVideoUrl ? (
-                        <Video
-                          src={`https://www.youtube.com/embed/${item.videos}`}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          rel="0"
+                        <Youtube
+                          key={`${item.videos}`}
+                          videoId={`${item.videos}`}
+                          opts={{
+                            width: "100%",
+                            height: "270",
+                            playerVars: {
+                              rel: 0,
+                              modestbranding: 1,
+                            },
+                          }}
+                          onEnd={(e) => {
+                            e.target.stopVideo(0);
+                          }}
                         />
                       ) : (
                         <NonVideoImgbox>
@@ -66,6 +90,7 @@ export default function MainPageVideo() {
           <></>
         )}
       </VideoAreaContainer>
+      <LoadingBlock ref={ref}></LoadingBlock>
       {loadingState ? (
         <Loading_spinner className="loading-spinner">
           <Spinner className="spinner"></Spinner>
@@ -104,12 +129,6 @@ const VideoBox = styled.div`
   pointer-events: none;
 `;
 
-const Video = styled.iframe`
-  width: 100%;
-  height: 100%;
-  transition: all 0.2s;
-`;
-
 const GameTagBox = styled.div`
   width: 100%;
   color: #fff;
@@ -124,7 +143,7 @@ const GameTagBox = styled.div`
 const GameTitleBox = styled.div`
   font-size: 20px;
   color: #fff;
-  margin-top: 15px;
+  margin-top: 30px;
   text-align: center;
 `;
 
@@ -132,14 +151,19 @@ const NonVideoImgbox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const NonVideoImg = styled.img`
-  width: 70%;
-  height: 70%;
-  object-fit: contain;
+  width: 100%;
+  height: 270px;
+`;
+
+const LoadingBlock = styled.div`
+  width: 100px;
+  height: 1px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
 `;
 
 const Loading_spinner = styled.div`

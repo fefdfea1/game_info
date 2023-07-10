@@ -96,9 +96,11 @@ export const useGetVideoUrl = (data: number, page: number, limit: number) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, limit]);
 
-  if (gameList.length > 1) {
+  useEffect(() => {
     dispatch(pageUp(nowPageRef.current));
     dispatch(cachData(gameList));
+  }, [gameList]);
+  if (gameList.length > 1) {
     return gameList;
   }
 };
