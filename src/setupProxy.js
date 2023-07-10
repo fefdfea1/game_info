@@ -43,11 +43,4 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
-  app.use(
-    "/v4/covers",
-    createProxyMiddleware({
-      target: "https://api.igdb.com",
-      changeOrigin: true,
-    })
-  );
 };

@@ -40,6 +40,9 @@ const SlideContainer = styled.aside`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
   font-size: 24px;
   transform: translateX(-100%);
   transition: all 0.5s;

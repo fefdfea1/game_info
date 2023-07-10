@@ -9,7 +9,7 @@ const settings = {
   customPaging: function (i: number) {
     return (
       <a>
-        <img src={`../../public/NoneprofileImg/profileNone.jpg`} alt="이미지" />
+        <img src={`/public/NoneprofileImg/profileNone.jpg`} alt="이미지" />
       </a>
     );
   },

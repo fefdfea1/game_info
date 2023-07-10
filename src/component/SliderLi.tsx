@@ -67,72 +67,13 @@ const SlideItems = styled.li`
   cursor: pointer;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-  background-color : transparent;
-}
-
-&::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  border-bottom-right-radius: 20px;
-  box-shadow: 5px 5px 0 5px ${Common.color.backgroundColor};
   background-color: transparent;
-  display: none;
-}
+  color: black;
 
-&::after {
-  content: "";
-  position: absolute;
-  bottom: -20px;
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  border-top-right-radius: 20px;
-  box-shadow: 5px -5px 0 5px ${Common.color.backgroundColor};
-  background-color: transparent;
-  display: none;
-}
-
-&.active::before,
-&.active::after {
-  display: block;
-}
-
-li:nth-of-type(3){
-  border-bottom-right-radius: 28px;
-}
-
-li:nth-of-type(3)::after{
-  box-shadow: none;
-}
-
-li:nth-of-type(4){
-  border-top-right-radius: 14px;
-}
-
-li:nth-of-type(4)::before{
-  box-shadow: none;
-}
-
-
-
-&.slidListItemActive{
-  background-color: ${Common.color.backgroundColor};
-  color: #fff;
-}
-&.slidListItemActive::before{
-  display : block;
-}
-&.slidListItemActive::after{
-  display: block
-}
-
-
+  &.slidListItemActive {
+    background-color: black;
+    color: #fff;
+  }
 `;
 
 const SlideItemSvg = styled.div`

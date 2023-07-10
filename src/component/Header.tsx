@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
+import { Common } from "../common/variable";
 export default function Header() {
   return (
     <HeaderArea>
@@ -27,12 +28,16 @@ export default function Header() {
 
 const HeaderArea = styled.header`
   width: 100%;
-  height: 140px;
+  height: 100px;
   padding-left: 60px;
   padding-right: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0px;
+  left: 0;
+  background-color: ${Common.color.backgroundColor};
   box-sizing: border-box;
 `;
 
