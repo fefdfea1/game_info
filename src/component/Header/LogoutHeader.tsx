@@ -1,7 +1,10 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
-import { Common } from "../common/variable";
-export default function Header() {
+import { Common } from "../../common/variable";
+import { useNavigate } from "react-router-dom";
+
+export default function LogOutHeader() {
+  const navigate = useNavigate();
   return (
     <HeaderArea>
       <HeaderLogo>로고</HeaderLogo>
@@ -11,16 +14,12 @@ export default function Header() {
           <FaSearch style={{ width: "30px", height: "30px", fill: "#fff" }} />
         </SvgBox>
       </SearchBox>
-      <UserProfileBox>
-        <UserProfileImgArea>
-          <UserProfile
-            src="https://png.pngtree.com/png-vector/20191115/ourmid/pngtree-beautiful-profile-line-vector-icon-png-image_1990469.jpg"
-            alt="프로필 영역"
-          />
-          <UserNameBox>
-            <UserName>김창규ddddddddddddddddddd</UserName>
-          </UserNameBox>
-        </UserProfileImgArea>
+      <UserProfileBox
+        onClick={() => {
+          navigate("/LoginPage");
+        }}
+      >
+        로그인하기
       </UserProfileBox>
     </HeaderArea>
   );
@@ -37,6 +36,7 @@ const HeaderArea = styled.header`
   position: sticky;
   top: 0px;
   left: 0;
+  z-index: 999;
   background-color: ${Common.color.backgroundColor};
   box-sizing: border-box;
 `;
@@ -49,33 +49,6 @@ const UserProfileBox = styled.div`
   display: flex;
   color: white;
   cursor: pointer;
-`;
-
-const UserProfileImgArea = styled.figure`
-  height: 50px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const UserProfile = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-`;
-
-const UserNameBox = styled.div`
-  width: 130px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const UserName = styled.span`
-  font-size: 17px;
-  margin-left: 10px;
-  width: 20px;
 `;
 
 const SearchBox = styled.form`

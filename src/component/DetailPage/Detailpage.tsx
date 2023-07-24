@@ -1,12 +1,13 @@
-import Header from "../Header";
+import Header from "../Header/Header";
 import styled from "@emotion/styled";
 import { Common } from "../../common/variable";
 import Slider from "react-slick";
+import AsideSlider from "../sideSlider/Slider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const settings = {
-  customPaging: function (i: number) {
+  customPaging: function () {
     return (
       <a>
         <img src={`/public/NoneprofileImg/profileNone.jpg`} alt="이미지" />

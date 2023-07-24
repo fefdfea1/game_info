@@ -7,35 +7,47 @@ myHeaders.append("Authorization", `Bearer ${Client_token}`);
 myHeaders.append("Content-Type", "application/json");
 
 export type searchDataType = {
-  cover: number;
-  first_release_date: number;
-  game_modes: number[];
-  language_supports: number[];
-  name: string;
-  platforms: number[];
-  screenshots: number[];
-  summary: string;
-  tage: number[];
-  videos?: number[] | string;
-};
-
-export type sortDataType = {
-  category: number;
   checksum: string;
-  created_at: number;
-  date: number;
-  game: number;
-  human: string;
+  cover: {
+    image_id: string;
+  };
+  first_release_date: number;
+  game_modes: {
+    name: string;
+    slug: string;
+  }[];
   id: number;
-  m: number;
-  platform: number;
-  region: number;
-  status: number;
-  updated_at: number;
-  videos: number[];
-  websites: string;
-  y: number;
+  name: string;
+  platforms: {
+    name: string;
+  }[];
+  screenshots: {
+    image_id: string;
+  }[];
+  summary: string;
+  videos: {
+    video_id: string;
+  }[];
+  genres: {
+    name: string;
+  }[];
+  total_rating: number;
 }[];
+
+export type retrunDataType = {
+  checksum: string;
+  cover: string;
+  first_release_date: number;
+  game_modes: string;
+  id: number;
+  platforms: React.ReactNode[];
+  screenshots: string;
+  summary: string;
+  videos: string;
+  genres: string[];
+  name: string;
+  total_rating: number | string;
+};
 
 export function gamesearch(data: string) {
   const response = fetch("/v4/games/", {
@@ -45,38 +57,10 @@ export function gamesearch(data: string) {
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-    body: `fields *; limit: 20; where id = (${data});`,
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating; limit: 16; where id = (${data});`,
   });
-  return response;
+  return response.then((res) => res.json());
 }
-
-export const gameScreenShotSearch = (data: number) => {
-  const response = fetch("/v4/games/", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Client-ID": `${Client_id}`,
-      Authorization: `Bearer ${Client_token}`,
-    },
-    body: `fields screenshots.*; where id = ${data};`,
-  });
-
-  return response;
-};
-
-export const CoverDataFetch = (data: string) => {
-  const response = fetch("/v4/games", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Client-ID": `${Client_id}`,
-      Authorization: `Bearer ${Client_token}`,
-    },
-    body: `fields cover.*; limit 20; where id = (127272);`,
-  });
-
-  return response;
-};
 
 export const gamesortUp = (
   date: number,
@@ -91,36 +75,104 @@ export const gamesortUp = (
       Authorization: `Bearer ${Client_token}`,
     },
 
-    body: `fields *; limit ${limit}; offset ${page}; where game.platforms = (48,49,6) & date < ${date}; sort date desc;`,
+    body: `fields *; limit ${limit}; offset ${
+      limit * page
+    }; where game.platforms = (48,49,6) & date < ${date}; sort date desc;`,
   });
 
   return response.then((res) => res.json());
 };
 
-export const gamesortDown = (date: number) => {
-  const response = fetch("/v4/release_dates/", {
+export const getTagData = (data: string) => {
+  const response = fetch("/v4/games", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-
-    body: `fields *; limit 30; where game.platforms = (6) & date < ${date}; sort date asc;`,
+    body: `fields genres.*; where id = (${data});`,
   });
 
-  return response;
+  return response.then((res) => res.json());
 };
 
-export const videoDataFetch = (data: string) => {
-  const response = fetch("/v4/game_videos", {
+export const sortRatingData = (
+  date: number,
+  page: number = 1,
+  limit: number = 1
+) => {
+  const response = fetch("/v4/games", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-    body: `fields *; where id = (${data});`,
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating,rating; sort rating desc; limit: ${limit}; 
+    where rating != null & release_dates.date > ${date}; offset ${
+      page * limit
+    }; `,
+  });
+
+  return response.then((res) => res.json());
+};
+
+export const containPcPlatforms = (
+  date: number,
+  page: number = 1,
+  limit: number = 1
+) => {
+  const response = fetch("/v4/games", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Client-ID": `${Client_id}`,
+      Authorization: `Bearer ${Client_token}`,
+    },
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating,rating;  limit: ${limit}; where release_dates.date > ${date} & platforms = (6); offset ${
+      page * limit
+    }; sort first_release_date desc;`,
+  });
+
+  return response.then((res) => res.json());
+};
+
+export const containPsPlatform = (
+  date: number,
+  page: number = 1,
+  limit: number = 1
+) => {
+  const response = fetch("/v4/games", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Client-ID": `${Client_id}`,
+      Authorization: `Bearer ${Client_token}`,
+    },
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating,rating;  limit: ${limit}; where release_dates.date > ${date} & platforms = (167,48); offset ${
+      page * limit
+    }; sort first_release_date desc;`,
+  });
+
+  return response.then((res) => res.json());
+};
+
+export const containXboxPlatform = (
+  date: number,
+  page: number = 1,
+  limit: number = 1
+) => {
+  const response = fetch("/v4/games", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Client-ID": `${Client_id}`,
+      Authorization: `Bearer ${Client_token}`,
+    },
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating,rating;  limit: ${limit}; where release_dates.date > ${date} & platforms = (169); offset ${
+      page * limit
+    }; sort first_release_date desc;`,
   });
 
   return response.then((res) => res.json());

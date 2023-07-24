@@ -1,22 +1,26 @@
 import { Route, Routes } from "react-router-dom";
-import Main from "./Main";
-import Detailpage from "./component/DetailPage/Detailpage";
 import { createSlice, configureStore, PayloadAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { searchDataType } from "./dataFetch/getGameData";
+import { retrunDataType } from "./dataFetch/getGameData";
+import Main from "./Main";
+import Detailpage from "./component/DetailPage/Detailpage";
+import LoginPage from "./component/LoginPage/LoginPage";
+import UserSetting from "./component/PersonalSetting/UserSetting";
 
-type initType = {
+export type initType = {
   page: number;
   limit: number;
   Nowunix: number;
-  gameData: searchDataType[];
+  gameData: retrunDataType[];
+  nowDataType: string;
 };
 
 const init: initType = {
-  page: 1,
-  limit: 15,
+  page: 0,
+  limit: 20,
   Nowunix: Math.floor(new Date().getTime() / 1000),
   gameData: [],
+  nowDataType: "default",
 };
 
 const counterSlice = createSlice({
@@ -29,8 +33,13 @@ const counterSlice = createSlice({
     setLimitOption: (state, action: PayloadAction<number>) => {
       state.limit = action.payload;
     },
-    cachData: (state, action: PayloadAction<searchDataType[]>) => {
+
+    cachData: (state, action: PayloadAction<retrunDataType[]>) => {
       state.gameData = action.payload;
+    },
+
+    changeType: (state, action: PayloadAction<string>) => {
+      state.nowDataType = action.payload;
     },
   },
 });
@@ -44,14 +53,17 @@ let store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export let { pageUp, setLimitOption, cachData } = counterSlice.actions;
+export let { pageUp, setLimitOption, cachData, changeType } =
+  counterSlice.actions;
 
 function App() {
   return (
     <Provider store={store}>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/:id" element={<Detailpage />} />
+        <Route path="/detail/:id" element={<Detailpage />} />
+        <Route path="/LoginPage" element={<LoginPage />} />
+        <Route path="/UserSetting" element={<UserSetting />} />
       </Routes>
     </Provider>
   );

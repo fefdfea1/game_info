@@ -1,18 +1,38 @@
 import SliderLi from "./SliderLi";
+import LogOutSliderLi from "./LogOutSliderLi";
 import styled from "@emotion/styled";
-import { Common } from "../common/variable";
+import { Common } from "../../common/variable";
 import { useState } from "react";
-export default function Slider() {
-  const [clickList, setClickList] = useState<number>(0);
+import { retrunDataType } from "../../dataFetch/getGameData";
+
+type porpsType = {
+  setSearch: React.Dispatch<React.SetStateAction<retrunDataType[]>>;
+  setSortState: React.Dispatch<React.SetStateAction<boolean>>;
+  LoginState: boolean;
+};
+
+export default function Slider(props: porpsType) {
+  const [clickList, setClickList] = useState<number>(-1);
   const [buttonClick, setClickStatus] = useState(false);
   return (
     <>
       <SlideContainer className={`${buttonClick === true ? "slidActive" : ""}`}>
         <SliderLogo>Logo</SliderLogo>
-        <SliderLi
-          setClickListNumber={setClickList}
-          clickListNumber={clickList}
-        />
+        {!props.LoginState ? (
+          <SliderLi
+            setClickListNumber={setClickList}
+            clickListNumber={clickList}
+            setSearch={props.setSearch}
+            setSortState={props.setSortState}
+          />
+        ) : (
+          <LogOutSliderLi
+            setClickListNumber={setClickList}
+            clickListNumber={clickList}
+            setSearch={props.setSearch}
+            setSortState={props.setSortState}
+          />
+        )}
         <SlideActiveButtonBox
           onClick={() => {
             setClickStatus(!buttonClick);
@@ -49,6 +69,21 @@ const SlideContainer = styled.aside`
 
   &.slidActive {
     transform: translateX(0);
+  }
+
+  &.slidActive ul .slidListItemActive ~ .firstUlActive {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+
+  &.slidActive ul .slidListItemActive ~ .secondListItemActive {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+
+  &.slidActive ul .slidListItemActive ~ .thirdListItemActive {
+    transform: translateX(100%);
+    opacity: 1;
   }
 `;
 
