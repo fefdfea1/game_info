@@ -7,6 +7,15 @@ import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { LogOut } from "../../SignUp_SignIn/LogOut";
+import { search } from "./search";
+
+export type searchDataType = {
+  cover: {
+    image_id: string;
+  };
+  id: number;
+  name: string;
+};
 
 export default function Header() {
   const userProfile = useRef<HTMLImageElement>(null);
@@ -14,7 +23,22 @@ export default function Header() {
   const profileClickProfile = useRef<HTMLImageElement>(null);
   const profileClickName = useRef<HTMLSpanElement>(null);
   const profileClickEmail = useRef<HTMLParagraphElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
   const [clickUserProfile, setClickProfileState] = useState<boolean>(false);
+  const [getSearchData, setData] = useState<searchDataType[]>([]);
+  const [backgroundClick, setBackgroundClickState] = useState<boolean>(true);
+
+  const clickEventHandler = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    console.log(target);
+    if (
+      target.classList.contains("videoAreaContainer") ||
+      target.classList.contains("header")
+    ) {
+      setBackgroundClickState(false);
+    }
+  };
+
   useEffect(() => {
     onAuthStateChanged(appAuth, async (user) => {
       if (user) {
@@ -33,6 +57,7 @@ export default function Header() {
             profileClickEmail.current &&
             getUserInfo
           ) {
+            console.log(getUserInfo.userProfileImg);
             profileClickProfile.current.src = getUserInfo.userProfileImg;
             profileClickName.current.innerText = getUserInfo.userName;
             profileClickEmail.current.innerText = `(${getUserInfo.userEmail})`;
@@ -42,15 +67,52 @@ export default function Header() {
         console.log("로그아웃");
       }
     });
-  });
+  }, [clickUserProfile]);
+  useEffect(() => {
+    window.addEventListener("click", clickEventHandler);
+    return () => {
+      window.removeEventListener("click", clickEventHandler);
+    };
+  }, []);
   return (
-    <HeaderArea>
+    <HeaderArea className="header">
       <HeaderLogo>로고</HeaderLogo>
       <SearchBox>
-        <UserSearch type="text" className="searchBar" />
+        <UserSearch
+          type="text"
+          className="searchBar"
+          ref={searchInput}
+          onChange={(event) => {
+            search(event, searchInput, setData, setBackgroundClickState);
+          }}
+        />
         <SvgBox>
           <FaSearch style={{ width: "30px", height: "30px", fill: "#fff" }} />
         </SvgBox>
+        {backgroundClick && getSearchData.length > 0 ? (
+          <SearchResultBox>
+            {getSearchData.map((item) => {
+              return (
+                <SearchLink to={`/detail/${item.id}`}>
+                  <SearchCoverImgBox>
+                    {item.cover !== undefined ? (
+                      <SearchCoverImg
+                        src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${item.cover.image_id}.jpg`}
+                        alt="게임 커버이미지 사진"
+                      />
+                    ) : (
+                      <SearchCoverImg
+                        src={`img/OIP.jpg`}
+                        alt="게임 커버이미지"
+                      />
+                    )}
+                  </SearchCoverImgBox>
+                  <SearchGameName>{item.name}</SearchGameName>
+                </SearchLink>
+              );
+            })}
+          </SearchResultBox>
+        ) : null}
       </SearchBox>
       <UserProfileBox
         onClick={() => {
@@ -202,8 +264,67 @@ const UserEmail = styled.p`
   color: black;
 `;
 
+const UserSearch = styled.input`
+  width: 660px;
+  height: 50px;
+  border-radius: 30px;
+  border: 1px solid #303030;
+  background-color: #121212;
+  outline: none;
+  color: #d8d9cf;
+  box-sizing: border-box;
+  padding: 0 96px 0 26px;
+  margin-left: 73px;
+`;
+
 const SearchBox = styled.form`
   position: relative;
+`;
+
+const SearchResultBox = styled.ul`
+  width: 70%;
+  height: 350px;
+  position: absolute;
+  top: 54px;
+  left: 135px;
+  overflow-y: auto;
+  background-color: #999;
+`;
+
+const SearchLink = styled(Link)`
+  width: 100%;
+  height: 100px;
+  display: block;
+  border: 1px solid black;
+  box-sizing: border-box;
+  display:flex;
+  align-items:center;
+  overflow-hidden;
+  padding: 0 30px;
+`;
+
+const SearchCoverImgBox = styled.figure`
+  width: 90px;
+  height: 80px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-hidden;
+`;
+
+const SearchCoverImg = styled.img`
+  width: 100%;
+  height: 100%;
+  display: block;
+`;
+
+const SearchGameName = styled.p`
+  width: 70%;
+  font-size: 19px;
+  font-weight: 600;
+  color: black;
+  margin-left: 30px;
+  line-height: 0.9;
 `;
 
 const SvgBox = styled.button`
@@ -220,17 +341,4 @@ const SvgBox = styled.button`
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   cursor: pointer;
-`;
-
-const UserSearch = styled.input`
-  width: 660px;
-  height: 50px;
-  border-radius: 30px;
-  border: 1px solid #303030;
-  background-color: #121212;
-  outline: none;
-  color: #d8d9cf;
-  box-sizing: border-box;
-  padding: 0 96px 0 26px;
-  margin-left: 73px;
 `;

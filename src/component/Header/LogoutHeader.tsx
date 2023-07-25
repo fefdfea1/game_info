@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function LogOutHeader() {
   const navigate = useNavigate();
   return (
-    <HeaderArea>
+    <HeaderArea className="header">
       <HeaderLogo>로고</HeaderLogo>
       <SearchBox>
         <UserSearch type="text" className="searchBar" />

@@ -5,6 +5,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { SignUp, OauthSignUp } from "../../SignUp_SignIn/SignUp";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { SignIn } from "../../SignUp_SignIn/SignIn";
+import BackToMainButton from "../backToMain/BackToMainButton";
 
 const SignUpsubMitEventHandler = (
   event: React.FormEvent<HTMLFormElement>,
@@ -75,12 +76,11 @@ export default function LoginPage() {
 
   return (
     <LoginPageContainer className={`${buttonClick ? "signUp" : "signIn"}`}>
-      <BackToMainPage
-        to={"/"}
-        className={`${buttonClick ? "signUpActive" : "signInActive"}`}
-      >
-        <ArrowSvg />
-      </BackToMainPage>
+      <BackToMainButton
+        buttonClick={buttonClick}
+        backgroundColor="#0792d7"
+        color="black"
+      />
       <LoginArea className={`${buttonClick ? "signUpActive" : "signInActive"}`}>
         <MoveBox className="moveBox">
           <LoginSection>

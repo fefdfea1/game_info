@@ -177,3 +177,17 @@ export const containXboxPlatform = (
 
   return response.then((res) => res.json());
 };
+
+export const searchGame = (searchData: string, limit: string) => {
+  console.log(searchData);
+  const response = fetch("/v4/games", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Client-ID": `${Client_id}`,
+      Authorization: `Bearer ${Client_token}`,
+    },
+    body: `fields name,cover.*,platforms.*; search "${searchData}"; where version_parent = null; limit: ${limit}; `,
+  });
+  return response.then((res) => res.json());
+};

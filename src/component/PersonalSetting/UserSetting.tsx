@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { appAuth, appFireStore, storage } from "../../common/fireBaseSettion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import BackToMainButton from "../backToMain/BackToMainButton";
 
 const changeProfile = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -42,45 +43,64 @@ const subMithandler = async (
   event.preventDefault();
   if (appAuth.currentUser) {
     const reg = /[()]/g;
+    const emailRegExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    var nameRegExp = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣a-zA-Z].{3,16}$/; // 닉네임 한글 or 영어만
+
     const email = appAuth.currentUser.email;
     const changeEmail = PreviewEmail.current?.innerText.replace(reg, "");
     const changeName = PreviewName.current?.innerText;
-
+    if (!changeName) {
+      alert("변경할 이름을 입력해 주십시오");
+      return;
+    }
+    console.log(nameRegExp.test(changeName));
     if (
       PreviewEmail.current &&
       PreviewName.current &&
       email &&
-      PreviewImgInput.current
+      PreviewImgInput.current &&
+      changeEmail
     ) {
-      if (PreviewImgInput.current.files) {
-        const imageRef = ref(storage, `${appAuth.currentUser?.uid}`);
-        const upLoadImage = PreviewImgInput.current.files[0];
-        if (upLoadImage) {
-          if (!imageRef) return;
-          uploadBytes(imageRef, upLoadImage).then((snapShot) => {
-            getDownloadURL(snapShot.ref)
-              .then(async (url) => {
-                const userDoc = doc(appFireStore, "userInfo", email);
-                await updateDoc(userDoc, {
-                  userEmail: changeEmail,
-                  userName: changeName,
-                  userProfileImg: url,
-                });
-                alert("변경이 완료되었습니다");
-              })
-              .catch((err) => {
-                const ErrorMessage = err.message;
-                alert(ErrorMessage);
+      if (changeName !== "") {
+        if (emailRegExp.test(changeEmail) && nameRegExp.test(changeName)) {
+          if (PreviewImgInput.current.files) {
+            const imageRef = ref(storage, `${appAuth.currentUser?.uid}`);
+            const upLoadImage = PreviewImgInput.current.files[0];
+            if (upLoadImage) {
+              if (!imageRef) return;
+              uploadBytes(imageRef, upLoadImage).then((snapShot) => {
+                getDownloadURL(snapShot.ref)
+                  .then(async (url) => {
+                    const userDoc = doc(appFireStore, "userInfo", email);
+                    await updateDoc(userDoc, {
+                      userEmail: changeEmail,
+                      userName: changeName,
+                      userProfileImg: url,
+                    });
+                    alert("변경이 완료되었습니다");
+                  })
+                  .catch((err) => {
+                    const ErrorMessage = err.message;
+                    alert(ErrorMessage);
+                  });
               });
-          });
+            } else {
+              const userDoc = doc(appFireStore, "userInfo", email);
+              await updateDoc(userDoc, {
+                userEmail: changeEmail,
+                userName: changeName,
+              });
+              alert("변경이 완료되었습니다");
+            }
+          }
         } else {
-          const userDoc = doc(appFireStore, "userInfo", email);
-          await updateDoc(userDoc, {
-            userEmail: changeEmail,
-            userName: changeName,
-          });
-          alert("변경이 완료되었습니다");
+          alert(
+            "이메일 형식 혹은 이름이 3 ~ 15자리의 영문 혹은 한글로 구성되어 있는지 확인해주십시오"
+          );
         }
+      } else {
+        alert("닉네임 확인");
       }
     }
   }
@@ -126,6 +146,7 @@ export default function UserSetting() {
   }, []);
   return (
     <Background>
+      <BackToMainButton backgroundColor="#999" color="#fff" />
       <SettingProfileBox>
         <ProfileImgBox>
           <UserProfileImg ref={profileImgRef} />
