@@ -16,7 +16,9 @@ export default function Slider(props: porpsType) {
   const [buttonClick, setClickStatus] = useState(false);
   return (
     <>
-      <SlideContainer className={`${buttonClick === true ? "slidActive" : ""}`}>
+      <SlideContainer
+        className={`${buttonClick === true ? "slidActive" : null}`}
+      >
         <SliderLogo>Logo</SliderLogo>
         {!props.LoginState ? (
           <SliderLi

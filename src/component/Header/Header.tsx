@@ -219,6 +219,7 @@ const UserProfileClick = styled.div`
   box-shadow: 0 0 10px #777;
   border-radius: 15px;
   cursor: auto;
+  z-index: 9999;
 `;
 
 const UserInfoBox = styled.div`

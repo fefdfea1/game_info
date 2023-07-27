@@ -1,6 +1,5 @@
 import Youtube from "react-youtube";
 import { retrunDataType } from "../../dataFetch/getGameData";
-import { useState } from "react";
 
 type propsType = {
   item: retrunDataType;

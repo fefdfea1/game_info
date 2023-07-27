@@ -27,7 +27,7 @@ export const search: propsType = (
         timeId = null;
         const data = await searchGame(inputValue, limit);
         setData(data);
-      }, 800);
+      }, 300);
     }
   }
 };
