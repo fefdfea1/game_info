@@ -30,7 +30,6 @@ export default function Header() {
 
   const clickEventHandler = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    console.log(target);
     if (
       target.classList.contains("videoAreaContainer") ||
       target.classList.contains("header")
@@ -57,14 +56,11 @@ export default function Header() {
             profileClickEmail.current &&
             getUserInfo
           ) {
-            console.log(getUserInfo.userProfileImg);
             profileClickProfile.current.src = getUserInfo.userProfileImg;
             profileClickName.current.innerText = getUserInfo.userName;
             profileClickEmail.current.innerText = `(${getUserInfo.userEmail})`;
           }
         }
-      } else {
-        console.log("로그아웃");
       }
     });
   }, [clickUserProfile]);

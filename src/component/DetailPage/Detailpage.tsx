@@ -4,27 +4,53 @@ import { Common } from "../../common/variable";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { RootState } from "../../App";
 import { BsFillPlayFill } from "react-icons/bs";
 import Youtube from "react-youtube";
+import { getGameInfo } from "./getDetailGameInfo";
+import { useEffect, useState, useRef } from "react";
+import { makeChart } from "./paintCircleCart";
+type gameInfoType = {
+  metaCritic: number;
+  first_release_date: number;
+  game_modes: string;
+  genres: string;
+  image_id: string;
+  name: string;
+  platform: string;
+  screenshots: string;
+  summary: string;
+  total_rating: number;
+  video_id: string;
+  similar_games: string;
+};
 
 export default function Detailpage() {
-  const selector = useSelector((selector: RootState) => selector.counter1);
+  const [DetailGameInfo, setGameInfo] = useState<gameInfoType>();
   const location = useLocation();
-  const DetailGameId = Number(location.pathname.slice(8));
-  const findData = selector.gameData.find((item) => {
-    return item.id === DetailGameId;
-  });
+  const CircleMetaCriticRef = useRef<HTMLDivElement>(null);
+  const CircleUserRatingRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const getGameInfoAsync = async () => {
+      const getGameData = await getGameInfo(location);
+      console.log(getGameData);
+      const metaCritic = getGameData.metaCritic;
+      const totalRating = Math.floor(getGameData.total_rating);
+      setGameInfo(getGameData);
+      makeChart(metaCritic, CircleMetaCriticRef, "red");
+      makeChart(totalRating, CircleUserRatingRef, "yellow");
+    };
+    getGameInfoAsync();
+  }, []);
   let screenAndVideosArray: string[] = [];
-  if (findData) {
-    const screenShotArr = findData.screenshots.split(",");
-    if (findData.videos !== "null") {
-      const videoUrl = `videoUrl${findData.videos}`;
-      screenAndVideosArray = [videoUrl, ...screenShotArr];
+
+  if (DetailGameInfo) {
+    const screentShotArr = DetailGameInfo.screenshots.split(",");
+    const videoArr = DetailGameInfo.video_id.split(",");
+    if (DetailGameInfo.video_id !== null) {
+      screenAndVideosArray = [...videoArr, ...screentShotArr];
     } else {
-      screenAndVideosArray = [...screenShotArr];
+      screenAndVideosArray = [...screentShotArr];
     }
   }
 
@@ -43,7 +69,7 @@ export default function Detailpage() {
         return (
           <SlideControlImgBox>
             <Img
-              src={`https://i.ytimg.com/vi_webp/${screenAndVideosArray[0].slice(
+              src={`https://i.ytimg.com/vi_webp/${screenAndVideosArray[i].slice(
                 8
               )}/maxresdefault.webp`}
               alt="게임 비디오 이미지"
@@ -67,7 +93,6 @@ export default function Detailpage() {
       <Header />
       <SlideContainer {...settings}>
         {screenAndVideosArray.map((item, index) => {
-          console.log(item.slice(0, 8) === "videoUrl");
           return (
             <>
               {item.slice(0, 8) === "videoUrl" ? (
@@ -104,14 +129,99 @@ export default function Detailpage() {
           );
         })}
       </SlideContainer>
+      <CircleChartContainer>
+        <CircleMetaCritic ref={CircleMetaCriticRef}>
+          <SmallCircle>
+            <Description>메타크리틱 점수</Description>
+            {DetailGameInfo?.metaCritic !== undefined ? (
+              <Score>{Math.floor(DetailGameInfo.metaCritic)}점</Score>
+            ) : (
+              <Score>점수없음</Score>
+            )}
+          </SmallCircle>
+        </CircleMetaCritic>
+
+        <CircleUserRating ref={CircleUserRatingRef}>
+          <SmallCircle>
+            <Description>
+              사용자
+              <br /> 평가
+            </Description>
+            {DetailGameInfo?.metaCritic !== undefined ? (
+              <Score>{Math.floor(DetailGameInfo.total_rating)}점</Score>
+            ) : (
+              <Score>점수없음</Score>
+            )}
+          </SmallCircle>
+        </CircleUserRating>
+      </CircleChartContainer>
+      <GameDescriptionArea>
+        <DescriptionTitle>About</DescriptionTitle>
+        {DetailGameInfo?.summary ? (
+          <GameDescription>{DetailGameInfo.summary}</GameDescription>
+        ) : (
+          <GameDescription>정보 없음</GameDescription>
+        )}
+        <GameDetailInfo>
+          <GameDetailLeft>
+            <DetailInfoBox>
+              <DetailIInfoTitle>platforms</DetailIInfoTitle>
+              {DetailGameInfo?.platform ? (
+                <DetailInfoContent>{DetailGameInfo.platform}</DetailInfoContent>
+              ) : (
+                <DetailInfoContent>정보 없음</DetailInfoContent>
+              )}
+            </DetailInfoBox>
+            <DetailInfoBox>
+              <DetailIInfoTitle>Genre</DetailIInfoTitle>
+              {DetailGameInfo?.genres ? (
+                <DetailInfoContent>{DetailGameInfo.genres}</DetailInfoContent>
+              ) : (
+                <DetailInfoContent>정보 없음</DetailInfoContent>
+              )}
+            </DetailInfoBox>
+          </GameDetailLeft>
+          <GameDetailRight>
+            <DetailInfoBox>
+              <DetailIInfoTitle>MetaScore</DetailIInfoTitle>
+              {DetailGameInfo?.metaCritic ? (
+                <DetailInfoContent>
+                  {DetailGameInfo.metaCritic}
+                </DetailInfoContent>
+              ) : (
+                <DetailInfoContent>정보 없음</DetailInfoContent>
+              )}
+            </DetailInfoBox>
+            <DetailInfoBox>
+              <DetailIInfoTitle>Release Date</DetailIInfoTitle>
+              {DetailGameInfo?.first_release_date ? (
+                <DetailInfoContent>
+                  {DetailGameInfo.first_release_date}
+                </DetailInfoContent>
+              ) : (
+                <DetailInfoContent>정보 없음</DetailInfoContent>
+              )}
+            </DetailInfoBox>
+          </GameDetailRight>
+        </GameDetailInfo>
+        <GameSimilarInfo>
+          <DetailIInfoTitle>Similar Games</DetailIInfoTitle>
+          {DetailGameInfo?.similar_games ? (
+            <Similar>{DetailGameInfo?.similar_games}</Similar>
+          ) : (
+            <Similar>정보 없음</Similar>
+          )}
+        </GameSimilarInfo>
+      </GameDescriptionArea>
     </Container>
   );
 }
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: ${Common.color.backgroundColor};
+  padding-bottom: 90px;
 `;
 
 const SlideContainer = styled(Slider)`
@@ -197,3 +307,137 @@ const PlaySvg = styled(BsFillPlayFill)`
   color: #fff;
   transform: translate(-50%, -50%);
 `;
+
+const CircleChartContainer = styled.div`
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  margin: 270px auto 0 auto;
+  padding: 0 200px;
+  box-sizing: border-box;
+`;
+
+const CircleMetaCritic = styled.div`
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: 0.3s;
+`;
+
+const CircleUserRating = styled.div`
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: 0.3s;
+`;
+const SmallCircle = styled.p`
+  width: 80px;
+  height: 80px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  text-align: center;
+`;
+
+const Description = styled.p`
+  position: absolute;
+  top: -78px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 25px;
+  white-space: nowrap;
+`;
+
+const Score = styled.span`
+  font-size: 18px;
+  font-weight: 900;
+`;
+
+const DescriptionTitle = styled.p`
+  position: absolute;
+  top: -50px;
+  left: 0%;
+  font-size: 40px;
+  font-weight: bold;
+`;
+
+const GameDescriptionArea = styled.div`
+  width: 50%;
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 auto;
+  margin-top: 102px;
+  color: #fff;
+`;
+
+const GameDetailInfo = styled.div`
+  width: 100%;
+  margin-top: 90px;
+  display: flex;
+`;
+
+const DetailInfoBox = styled.div`
+  width: 100%;
+  line-height: 1.8;
+  margin-top: 90px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+`;
+
+const DetailIInfoTitle = styled.p`
+  color: #3e4648;
+  font-weight: 700;
+  font-size: 27px;
+`;
+
+const DetailInfoContent = styled.p`
+  font-size: 17px;
+  font-weight: 800;
+`;
+
+const GameDetailLeft = styled.div`
+  width: 50%;
+`;
+
+const GameDetailRight = styled.div`
+  width: 50%;
+`;
+
+const GameDescription = styled.div`
+  width: 100%;
+  height: 100%;
+  line-height: 1.5;
+  font-size: 20px;
+  font-weight: 00;
+`;
+
+const GameSimilarInfo = styled.div`
+  width: 100%;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 90px;
+`;
+
+const Similar = styled.span`
+  font-size: 20px;
+`;
+
+const RecommendComputerspecs = styled.div``;

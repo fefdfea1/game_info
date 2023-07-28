@@ -7,6 +7,15 @@ myHeaders.append("Authorization", `Bearer ${Client_token}`);
 myHeaders.append("Content-Type", "application/json");
 
 export type searchDataType = {
+  similar_games: {
+    name: string;
+    id: number;
+  }[];
+  aggregated_rating: number;
+  language_supports: {
+    language: number;
+    language_support_type: number;
+  };
   checksum: string;
   cover: {
     image_id: string;
@@ -15,21 +24,27 @@ export type searchDataType = {
   game_modes: {
     name: string;
     slug: string;
+    id: number;
   }[];
   id: number;
   name: string;
   platforms: {
     name: string;
+    abbreviation: string;
+    id: number;
   }[];
   screenshots: {
     image_id: string;
+    id: number;
   }[];
   summary: string;
   videos: {
     video_id: string;
+    id: number;
   }[];
   genres: {
     name: string;
+    id: number;
   }[];
   total_rating: number;
 }[];
@@ -57,7 +72,7 @@ export function gamesearch(data: string) {
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,total_rating; limit: 16; where id = (${data});`,
+    body: `fields cover.*,platforms.*,name,summary,videos.*,game_modes.*,screenshots.*,first_release_date,checksum,genres.*,language_supports.*,aggregated_rating,total_rating,similar_games.*; limit: 16; where id = (${data});`,
   });
   return response.then((res) => res.json());
 }
@@ -179,7 +194,6 @@ export const containXboxPlatform = (
 };
 
 export const searchGame = (searchData: string, limit: string) => {
-  console.log(searchData);
   const response = fetch("/v4/games", {
     method: "POST",
     headers: {
@@ -187,7 +201,7 @@ export const searchGame = (searchData: string, limit: string) => {
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-    body: `fields name,cover.*,platforms.*; search "${searchData}"; where version_parent = null; limit: ${limit}; `,
+    body: `fields name,cover.*,platforms.*,; search "${searchData}"; where version_parent = null; limit: ${limit}; `,
   });
   return response.then((res) => res.json());
 };
