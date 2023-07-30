@@ -54,7 +54,6 @@ const subMithandler = async (
       alert("변경할 이름을 입력해 주십시오");
       return;
     }
-    console.log(nameRegExp.test(changeName));
     if (
       PreviewEmail.current &&
       PreviewName.current &&
@@ -120,10 +119,12 @@ export default function UserSetting() {
     onAuthStateChanged(appAuth, async (user) => {
       if (user) {
         const userEmail = user.email;
+        const userUid = user.uid;
         if (userEmail) {
-          const docRef = doc(appFireStore, "userInfo", userEmail);
+          const docRef = doc(appFireStore, "userInfo", userUid);
           const docSnap = await getDoc(docRef);
           const getUserInfo = docSnap.data();
+          console.log(PreviewName);
           if (
             profileImgRef.current &&
             UserEmailRef.current &&
@@ -133,6 +134,7 @@ export default function UserSetting() {
             PreviewEmail.current &&
             PreviewName.current
           ) {
+            console.log("sdfsd");
             profileImgRef.current.src = getUserInfo.userProfileImg;
             UserEmailRef.current.value = userEmail;
             UserNameRef.current.innerText = getUserInfo.userName;
@@ -229,7 +231,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #14161e;
+  background-color: var(--backgroundColor);
 `;
 
 const SettingProfileBox = styled.div`
@@ -252,7 +254,7 @@ const ProfileImgBox = styled.figure`
   transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--colorWhite);
 `;
 
 const UserProfileImg = styled.img`
@@ -262,7 +264,7 @@ const UserProfileImg = styled.img`
 
 const UserName = styled.p`
   text-align: center;
-  color: #fff;
+  color: var(--fontWhite);
   margin-top: 63px;
   font-size: 30px;
 `;
@@ -276,7 +278,7 @@ const Description = styled.p`
 const UserInfoBox = styled.form`
   width: 100%;
   margin-top: 86px;
-  color: #fff;
+  color: var(--fontWhite);
 `;
 
 const ShowPreviewImgBox = styled.figure`
@@ -292,7 +294,7 @@ const EditUserInfoLabel = styled.label`
   padding: 15px 20px;
   border: 1px solid black;
   background: #fff;
-  color: black;
+  color: var(--fontBlack);
   margin-left: 60px;
   border-radius: 15px;
   cursor: pointer;
@@ -345,7 +347,7 @@ const ShowPrevViewSpan = styled.span`
 const ShowPreveUserInfo = styled.div`
   width: 150px;
   margin-left: 25px;
-  color: black;
+  color: var(--fontBlack);
   line-height: 1.6;
 `;
 
@@ -354,7 +356,7 @@ const PreviewUserPage = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  background-color:#999;
+  background-color: var(--colorGray);
   box-shadow: 0 0 10px #777;
   border-radius: 15px;
 `;
@@ -362,8 +364,8 @@ const PreviewUserPage = styled.div`
 const EditUserInfo = styled.input`
   width: 100%;
   font-size: 18px;
-  background-color: #14161e;
-  color: #fff;
+  background-color: var(--backgroundColor);
+  color: var(--fontWhite);
   font-size: 25px;
   margin-top: 50px;
   padding: 15px 20px;
@@ -372,8 +374,8 @@ const EditUserInfo = styled.input`
 
   &:focus,
   &:active {
-    background-color: #fff;
-    color: black;
+    background-color: var(--colorWhite);
+    color: var(--fontBlack);
   }
 
   &:first-child {

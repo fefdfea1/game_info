@@ -99,8 +99,8 @@ const AddinterestGame = styled.button`
   cursor: pointer;
 
   &.Active {
-    background-color: black;
-    color: #fff;
+    background-color: var(--colorBlack);
+    color: var(--fontWhite);
   }
 `;
 

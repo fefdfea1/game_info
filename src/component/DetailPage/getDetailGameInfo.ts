@@ -1,5 +1,6 @@
 import { gamesearch } from "../../dataFetch/getGameData";
 import { searchDataType } from "../../dataFetch/getGameData";
+import { Unix_timestamp } from "./changeUnixTime";
 
 export const getGameInfo = async (location: any) => {
   const spliceLocation = location.pathname.slice(8);
@@ -16,6 +17,9 @@ const filterOutData = (data: searchDataType) => {
   let screenShots = "";
   let videos = "";
   let similarGames = "";
+
+  let releaseDate = Unix_timestamp(data[0].first_release_date);
+
   if (data[0].game_modes) {
     data[0].game_modes.forEach((item) => {
       if (data[0].game_modes[data[0].game_modes.length - 1].id === item.id) {
@@ -82,7 +86,7 @@ const filterOutData = (data: searchDataType) => {
     metaCritic: data[0].aggregated_rating,
     languageSupport: data[0].language_supports,
     image_id: data[0].cover.image_id,
-    first_release_date: data[0].first_release_date,
+    first_release_date: releaseDate,
     game_modes: game_modes,
     genres: genres,
     name: data[0].name,

@@ -272,7 +272,7 @@ const VideoAreaContainer = styled.section`
   padding: 0 3%;
   gap: 0 2%;
   justify-content: center;
-  align-items: start;
+  align-items: center;
 `;
 
 const VideoContainer = styled.div`
@@ -296,6 +296,10 @@ const VideoContainer = styled.div`
 
   &:hover a .videoBox .NonVideoImgbox {
     height: 350px;
+  }
+
+  @media (max-width: 740px) {
+    width: 90%;
   }
 `;
 
@@ -323,7 +327,7 @@ const VideoBox = styled.div`
 
 const GameTagBox = styled.div`
   width: 100%;
-  color: #fff;
+  color: var(--fontWhite);
   display: flex;
   justify-content: space-between;
   padding: 0 27px;
@@ -335,7 +339,7 @@ const GameTagBox = styled.div`
 
 const GameTitleBox = styled.div`
   font-size: 20px;
-  color: #fff;
+  color: var(--fontWhite);
   margin-top: 30px;
   text-align: center;
   pointer-events: none;
@@ -380,7 +384,7 @@ const Score = styled.span`
   min-width: 32px;
   height: 100%;
   border-color: rgba(109, 200, 73, 0.4);
-  color: #6dc849;
+  color: var(--ScroeFontColor);
   padding: 6px 0;
   text-align: center;
   border-radius: 4px;

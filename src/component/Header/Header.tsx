@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
-import { Common } from "../../common/variable";
 import { appAuth, appFireStore } from "../../common/fireBaseSettion";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
@@ -41,9 +40,10 @@ export default function Header() {
   useEffect(() => {
     onAuthStateChanged(appAuth, async (user) => {
       if (user) {
+        const userUid = user.uid;
         const userEmail = user.email;
         if (typeof userEmail === "string") {
-          const docRef = doc(appFireStore, "userInfo", userEmail);
+          const docRef = doc(appFireStore, "userInfo", userUid);
           const docSnap = await getDoc(docRef);
           const getUserInfo = docSnap.data();
           if (userProfile.current && getUserInfo && userName.current) {
@@ -153,7 +153,7 @@ const HeaderArea = styled.header`
   width: 100%;
   height: 100px;
   padding-left: 60px;
-  padding-right: 50px;
+  padding-right: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -161,24 +161,28 @@ const HeaderArea = styled.header`
   top: 0px;
   left: 0;
   z-index: 999;
-  background-color: ${Common.color.backgroundColor};
+  background-color: var(--backgroundColor);
   box-sizing: border-box;
+
+  @media (max-width: 740px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 `;
 
 const HeaderLogo = styled.div`
-  color: white;
+  color: var(--fontWhite);
 `;
 
 const UserProfileBox = styled.div`
   position: relative;
   display: flex;
-  color: white;
+  color: var(--fontWhite);
   cursor: pointer;
 `;
 
 const UserProfileArea = styled.figure`
   height: 50px;
-  margin-right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -191,7 +195,6 @@ const UserProfile = styled.img`
 `;
 
 const UserNameBox = styled.div`
-  width: 130px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -200,7 +203,6 @@ const UserNameBox = styled.div`
 const UserName = styled.span`
   font-size: 17px;
   margin-left: 10px;
-  width: 20px;
 `;
 
 const UserProfileClick = styled.div`
@@ -211,7 +213,7 @@ const UserProfileClick = styled.div`
   position: absolute;
   top: 68px;
   left: -149px;
-  background-color: #999;
+  background-color: var(--colorGray);
   box-shadow: 0 0 10px #777;
   border-radius: 15px;
   cursor: auto;
@@ -225,21 +227,27 @@ const UserInfoBox = styled.div`
 `;
 
 const MoveUserSetting = styled(Link)`
-  color: black;
+  color: var(--fontBlack);
   font-weight: 600;
   font-size: 13px;
+  margin-right: 10px;
   &:active {
-    color: black;
+    color: var(--fontBlack);
   }
 
   &:focus {
-    color: black;
+    color: var(--fontBlack);
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 11px;
   }
 `;
 
 const SettingAndLogOutBox = styled.div`
   width: 100%;
   display: flex;
+  margin-top: 5px;
 `;
 
 const LogOutButotn = styled.button`
@@ -247,31 +255,52 @@ const LogOutButotn = styled.button`
   border: 0;
   cursor: pointer;
   font-weight: 800;
+  font-size: 13px;
+  color: var(--fontBlack);
+
+  @media (max-width: 1200px) {
+    font-size: 11px;
+  }
 `;
 
 const ClickUserName = styled(UserName)`
-  color: black;
+  color: var(--fontBlack);
   font-size: 16px;
   margin-left: 0;
+
+  @media (max-width: 1200px) {
+    font-size: 13px;
+  }
 `;
 
 const UserEmail = styled.p`
   font-size: 17px;
   font-weight: 500;
-  color: black;
+  color: var(--fontBlack);
+  @media (max-width: 1200px) {
+    font-size: 14px;
+  }
 `;
 
 const UserSearch = styled.input`
   width: 660px;
   height: 50px;
   border-radius: 30px;
-  border: 1px solid #303030;
-  background-color: #121212;
+  border: 1px solid var(--searchBoxBorder);
+  background-color: var(--searchBoxBackgroundColor);
   outline: none;
-  color: #d8d9cf;
+  color: var(--userSearchFontColor);
   box-sizing: border-box;
   padding: 0 96px 0 26px;
-  margin-left: 73px;
+  margin-left: auto;
+
+  @media (max-width: 1200px) {
+    width: 400px;
+  }
+
+  @media (max-width: 740px) {
+    width: 300px;
+  }
 `;
 
 const SearchBox = styled.form`
@@ -285,7 +314,7 @@ const SearchResultBox = styled.ul`
   top: 54px;
   left: 135px;
   overflow-y: auto;
-  background-color: #999;
+  background-color: var(--colorGray);
 `;
 
 const SearchLink = styled(Link)`
@@ -319,7 +348,7 @@ const SearchGameName = styled.p`
   width: 70%;
   font-size: 19px;
   font-weight: 600;
-  color: black;
+  color: var(--fontBlack);
   margin-left: 30px;
   line-height: 0.9;
 `;

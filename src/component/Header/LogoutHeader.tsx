@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
-import { Common } from "../../common/variable";
 import { useNavigate } from "react-router-dom";
 
 export default function LogOutHeader() {
@@ -37,17 +36,17 @@ const HeaderArea = styled.header`
   top: 0px;
   left: 0;
   z-index: 999;
-  background-color: ${Common.color.backgroundColor};
+  background-color: var(--backgroundColor);
   box-sizing: border-box;
 `;
 
 const HeaderLogo = styled.div`
-  color: white;
+  color: var(--colorWhite);
 `;
 
 const UserProfileBox = styled.div`
   display: flex;
-  color: white;
+  color: var(--colorWhite);
   cursor: pointer;
 `;
 
@@ -58,7 +57,7 @@ const SearchBox = styled.form`
 const SvgBox = styled.button`
   width: 70px;
   height: 100%;
-  background-color: #222222;
+  background-color: var(--darkGray);
   position: absolute;
   top: 0;
   right: 0;
@@ -76,9 +75,9 @@ const UserSearch = styled.input`
   height: 50px;
   border-radius: 30px;
   border: 1px solid #303030;
-  background-color: #121212;
+  background-color: var(--searchBoxBackgroundColor);
   outline: none;
-  color: #d8d9cf;
+  color: var(--userSearchFontColor);
   box-sizing: border-box;
   padding: 0 96px 0 26px;
   margin-left: 73px;

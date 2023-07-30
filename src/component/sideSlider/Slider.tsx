@@ -1,7 +1,6 @@
 import SliderLi from "./SliderLi";
-import LogOutSliderLi from "./LogOutSliderLi";
+import LogOutSliderLi from "./LogInSliderLi";
 import styled from "@emotion/styled";
-import { Common } from "../../common/variable";
 import { useState } from "react";
 import { retrunDataType } from "../../dataFetch/getGameData";
 
@@ -57,11 +56,12 @@ const SlideContainer = styled.aside`
   top: 0;
   left: 0;
   z-index: 999;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: fixed;
   position: fixed;
   left: 0;
   top: 0;
@@ -71,6 +71,18 @@ const SlideContainer = styled.aside`
 
   &.slidActive {
     transform: translateX(0);
+  }
+
+  &.slidActive ul {
+    @media (max-width: 1200px) {
+      width: 250px;
+      font-size: 19px;
+    }
+
+    @media (max-width: 740px) {
+      width: 200px;
+      font-size: 15px;
+    }
   }
 
   &.slidActive ul .slidListItemActive ~ .firstUlActive {
@@ -87,6 +99,15 @@ const SlideContainer = styled.aside`
     transform: translateX(100%);
     opacity: 1;
   }
+
+  @media (max-width: 1200px) {
+    width: 250px;
+    font-size: 19px;
+  }
+  @media (max-width: 740px) {
+    width: 200px;
+    font-size: 15px;
+  }
 `;
 
 const SliderLogo = styled.h2`
@@ -99,7 +120,7 @@ const SliderLogo = styled.h2`
 const SlideActiveButtonBox = styled.button`
   width: 30px;
   height: 50px;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   position: absolute;
   top: 50%;
   right: -30px;
@@ -115,10 +136,10 @@ const SlideActiveButton = styled.div`
   height: 20px;
   transform: rotate(45deg);
   border: 0;
-  border-top: 3px solid ${Common.color.backgroundColor};
-  border-right: 3px solid ${Common.color.backgroundColor};
+  border-top: 3px solid var(--colorBlack);
+  border-right: 3px solid var(--colorBlack);
   background: transparent;
-  margin-left: -13px;
+  margin-left: -4px;
   transition: transform 0.5s;
 
   &.buttonActive {

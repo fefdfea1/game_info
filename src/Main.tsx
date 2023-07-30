@@ -3,7 +3,6 @@ import Header from "./component/Header/Header";
 import LogOutHeader from "./component/Header/LogoutHeader";
 import Slider from "./component/sideSlider/Slider";
 import MainPageVideo from "./component/MainPage/MainPageVideo";
-import { Common } from "./common/variable";
 import { useState, useEffect } from "react";
 import { retrunDataType } from "./dataFetch/getGameData";
 import { onAuthStateChanged } from "firebase/auth";
@@ -44,9 +43,8 @@ export default function Main() {
 const Container = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${Common.color.backgroundColor};
   position: relative;
-
+  background-color: var(--backgroundColor);
   &.hideChangeSort {
     height: 100vh;
     overflow: hidden;

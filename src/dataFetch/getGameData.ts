@@ -201,7 +201,7 @@ export const searchGame = (searchData: string, limit: string) => {
       "Client-ID": `${Client_id}`,
       Authorization: `Bearer ${Client_token}`,
     },
-    body: `fields name,cover.*,platforms.*,; search "${searchData}"; where version_parent = null; limit: ${limit}; `,
+    body: `fields name,cover.*,platforms.*; search "${searchData}"; where version_parent = null; limit: ${limit}; `,
   });
   return response.then((res) => res.json());
 };

@@ -14,6 +14,7 @@ import { getDataType } from "../MainPage/MainPageVideo";
 import { retrunDataType } from "../../dataFetch/getGameData";
 import { setPrveRecordType } from "../MainPage/MainPageVideo";
 import { Link } from "react-router-dom";
+import { changeMode } from "../../darkWhiteMode/changeDarkOrWhiteMode";
 
 interface sliderPropsType {
   clickListNumber: number;
@@ -81,6 +82,15 @@ const clickEvent: clickEvnet = (
   setInterestedGame
 ) => {
   const target = event.target as HTMLLIElement;
+  if (target.classList.contains("slidListItemActive")) {
+    target.classList.remove("slidListItemActive");
+  } else {
+    const slideItems = document.querySelectorAll(".slideItem");
+    slideItems.forEach((item) => {
+      item.classList.remove("slidListItemActive");
+    });
+    target.classList.add("slidListItemActive");
+  }
   const dataset = Number(target.dataset.num);
   props.setClickListNumber(dataset);
   switch (dataset) {
@@ -89,6 +99,9 @@ const clickEvent: clickEvnet = (
       break;
     case 2:
       thirdClickEvent(setInterestedGame);
+      break;
+    case 3:
+      changeMode(target);
       break;
     case 4:
       navigate("/LoginPage");
@@ -174,8 +187,7 @@ export default function SliderLi(props: sliderPropsType) {
             onClick={(event) => {
               clickEvent(event, props, navigate, setRecord, setInterestedGame);
             }}
-            className={`
-            ${props.clickListNumber === index ? "slidListItemActive" : null}`}
+            className={`slideItem ${index === 3 ? "dark" : ""}`}
           >
             <SlideItemSvg>{item[0]}</SlideItemSvg>
             <SlideItemSpan>{item[1]}</SlideItemSpan>
@@ -262,16 +274,29 @@ const SlideItems = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
 
   &.slidListItemActive {
-    background-color: black;
-    color: #fff;
+    background-color: var(--colorBlack);
+    color: var(--fontWhite);
+  }
+
+  &.slidListItemDeActive {
+    background-color: transparent;
+    color: var(--fontWhite);
   }
 
   &.filterListActive ~ .secondUl {
     transform: translateX(100%);
     opacity: 1;
+  }
+
+  @media (max-width: 1200px) {
+    margin-left: 30px;
+  }
+
+  @media (max-width: 740px) {
+    margin-left: 15px;
   }
 `;
 
@@ -301,14 +326,14 @@ const SortSliderUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;
   opacity: 0;
 
   &.firstUlActive .active {
-    background-color: #999;
+    background-color: var(--colorGray);
   }
 `;
 
@@ -324,7 +349,15 @@ const SortSliderLi = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
+
+  @media (max-width: 1200px) {
+    margin-left: 30px;
+  }
+
+  @media (max-width: 740px) {
+    margin-left: 15px;
+  }
 `;
 const PrevWatchUl = styled.ul`
   position: absolute;
@@ -335,7 +368,7 @@ const PrevWatchUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;
@@ -355,7 +388,7 @@ const PrevWatchLi = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
 `;
 
 const PrevWatchAnchor = styled(Link)`
@@ -399,7 +432,7 @@ const InterestedGameUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;

@@ -1,6 +1,5 @@
 export const makeChart = (score: any, refObject: any, color: any) => {
   let i = 1;
-  console.log(!isNaN(score));
   if (score !== undefined && !isNaN(score)) {
     let chartFn = setInterval(() => {
       if (i <= score) {
@@ -10,8 +9,9 @@ export const makeChart = (score: any, refObject: any, color: any) => {
         clearInterval(chartFn);
       }
     }, 10);
+    return chartFn;
   } else {
-    noneValue(refObject.current, color);
+    noneValue(refObject.current);
   }
 };
 
@@ -19,6 +19,10 @@ const colorfn = (i: number, refObject: HTMLDivElement, color: string) => {
   refObject.style.background = `conic-gradient(${color} 0% ${i}%, #dedede ${i}% 100%`;
 };
 
-const noneValue = (refObject: HTMLDivElement, color: string) => {
-  refObject.style.background = `conic-gradient(#dedede 0% 100%, #dedede 100% 100%`;
+const noneValue = (refObject: HTMLDivElement) => {
+  try {
+    refObject.style.background = `conic-gradient(#dedede 0% 100%, #dedede 100% 100%`;
+  } catch (err) {
+    console.error(err);
+  }
 };

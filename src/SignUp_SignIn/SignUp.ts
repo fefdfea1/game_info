@@ -8,7 +8,7 @@ import { NavigateFunction } from "react-router-dom";
 import { appFireStore, Provider } from "../common/fireBaseSettion";
 import { doc, setDoc } from "firebase/firestore";
 const noProfileImg =
-  "https://firebasestorage.googleapis.com/v0/b/for-gamer-f55df.appspot.com/o/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png?alt=media&token=9cb4a6ac-3b05-4471-a2ae-acb499612e09";
+  "https://firebasestorage.googleapis.com/v0/b/for-gamer-f55df.appspot.com/o/noProfileImg%2F%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png?alt=media&token=3c09cb03-28fb-4b5a-be4e-59dd53a63408";
 export const SignUp = async (
   email: string,
   password: string,
@@ -18,10 +18,12 @@ export const SignUp = async (
   createUserWithEmailAndPassword(appAuth, email, password)
     .then(async (userCredential) => {
       const { user } = userCredential;
-      await setDoc(doc(appFireStore, "userInfo", email), {
+
+      await setDoc(doc(appFireStore, "userInfo", user.uid), {
         userEmail: email,
         userName: displayName,
         userProfileImg: noProfileImg,
+        userUid: user.uid,
       });
 
       navigate("/");
@@ -44,7 +46,6 @@ export const OauthSignUp = (
   signInWithPopup(appAuth, Provider).then(async (result) => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (credential !== null) {
-      const token = credential.accessToken;
       const googleUserInfo = result.user;
       if (googleUserInfo.email !== null) {
         createUserWithEmailAndPassword(appAuth, googleUserInfo.email, password)

@@ -1,15 +1,9 @@
 import styled from "@emotion/styled";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
 type propsType = {
   buttonClick?: boolean;
   backgroundColor: string;
-  color: string;
-};
-
-type EmotionType = {
-  backgorundColor: string;
   color: string;
 };
 
@@ -18,18 +12,13 @@ export default function BackToMainButton(props: propsType) {
     <BackToMainPage
       to={"/"}
       className={`${props.buttonClick ? "signUpActive" : "signInActive"}`}
-      backgorundColor={props.backgroundColor}
-      color={props.color}
     >
       <ArrowSvg />
     </BackToMainPage>
   );
 }
 
-// background-color: #0792d7;
-// #0792d7
-
-const BackToMainPage = styled(Link)<EmotionType>`
+const BackToMainPage = styled(Link)`
   width: 60px;
   height: 60px;
   position: absolute;
@@ -39,12 +28,14 @@ const BackToMainPage = styled(Link)<EmotionType>`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  background-color: ${(props) => props.backgorundColor};
+  background-color: var(--colorGray);
   cursor: pointer;
   transition: background-color 0.5s;
-  color: ${(props) => props.color};
+  color: var(--colorBlack);
+  z-index: 9999;
   &.signUpActive {
-    background-color: #a04969;
+    background-color: var(--colorBlack);
+    color: var(--colorWhite);
   }
 
   &:active {

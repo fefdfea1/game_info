@@ -4,7 +4,6 @@ import { BiVideoRecording } from "react-icons/bi";
 import { LiaGamepadSolid } from "react-icons/lia";
 import { CiLogout } from "react-icons/ci";
 import { BsSun } from "react-icons/bs";
-import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Dispatch, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, initType, pageUp, cachData, changeType } from "../../App";
@@ -15,6 +14,7 @@ import { retrunDataType } from "../../dataFetch/getGameData";
 import { setPrveRecordType } from "../MainPage/MainPageVideo";
 import { Link } from "react-router-dom";
 import { LogOut } from "../../SignUp_SignIn/LogOut";
+import { changeMode } from "../../darkWhiteMode/changeDarkOrWhiteMode";
 
 interface sliderPropsType {
   clickListNumber: number;
@@ -26,7 +26,6 @@ interface sliderPropsType {
 type clickEvnet = (
   event: React.MouseEvent<HTMLLIElement, MouseEvent>,
   props: sliderPropsType,
-  navigate: NavigateFunction,
   setRecord: Dispatch<React.SetStateAction<setPrveRecordType[]>>,
   setInterestedGame: Dispatch<React.SetStateAction<addGameDataType[]>>
 ) => void;
@@ -74,14 +73,17 @@ const prevWatchClickEvent = (
   }
 };
 
-const clickEvent: clickEvnet = (
-  event,
-  props,
-  navigate,
-  setRecord,
-  setInterestedGame
-) => {
+const clickEvent: clickEvnet = (event, props, setRecord, setInterestedGame) => {
   const target = event.target as HTMLLIElement;
+  if (target.classList.contains("slidListItemActive")) {
+    target.classList.remove("slidListItemActive");
+  } else {
+    const slideItems = document.querySelectorAll(".slideItem");
+    slideItems.forEach((item) => {
+      item.classList.remove("slidListItemActive");
+    });
+    target.classList.add("slidListItemActive");
+  }
   const dataset = Number(target.dataset.num);
   props.setClickListNumber(dataset);
   switch (dataset) {
@@ -90,6 +92,9 @@ const clickEvent: clickEvnet = (
       break;
     case 2:
       thirdClickEvent(setInterestedGame);
+      break;
+    case 3:
+      changeMode(target);
       break;
     case 4:
       LogOut();
@@ -162,7 +167,6 @@ export default function LogOutSliderLi(props: sliderPropsType) {
   const [secondLiClick, setClickNumber] = useState<number>(0);
   const [prevRecord, setRecord] = useState<setPrveRecordType[]>([]);
   const [InterestedGame, setInterestedGame] = useState<addGameDataType[]>([]);
-  const navigate = useNavigate();
   const select = useSelector((res: RootState) => res.counter1);
   const dispatch = useDispatch();
 
@@ -174,10 +178,9 @@ export default function LogOutSliderLi(props: sliderPropsType) {
             data-num={index}
             key={index}
             onClick={(event) => {
-              clickEvent(event, props, navigate, setRecord, setInterestedGame);
+              clickEvent(event, props, setRecord, setInterestedGame);
             }}
-            className={`
-            ${props.clickListNumber === index ? "slidListItemActive" : null}`}
+            className={`slideItem ${index === 3 ? "dark" : ""}`}
           >
             <SlideItemSvg>{item[0]}</SlideItemSvg>
             <SlideItemSpan>{item[1]}</SlideItemSpan>
@@ -264,16 +267,29 @@ const SlideItems = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
 
   &.slidListItemActive {
-    background-color: black;
-    color: #fff;
+    background-color: var(--colorBlack);
+    color: var(--fontWhite);
+  }
+
+  &.slidListItemDeActive {
+    background-color: transparent;
+    color: var(--fontWhite);
   }
 
   &.filterListActive ~ .secondUl {
     transform: translateX(100%);
     opacity: 1;
+  }
+
+  @media (max-width: 1200px) {
+    margin-left: 30px;
+  }
+
+  @media (max-width: 740px) {
+    margin-left: 15px;
   }
 `;
 
@@ -303,14 +319,14 @@ const SortSliderUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;
   opacity: 0;
 
   &.firstUlActive .active {
-    background-color: #999;
+    background-color: var(--colorGray);
   }
 `;
 
@@ -326,7 +342,15 @@ const SortSliderLi = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
+
+  @media (max-width: 1200px) {
+    margin-left: 30px;
+  }
+
+  @media (max-width: 740px) {
+    margin-left: 15px;
+  }
 `;
 const PrevWatchUl = styled.ul`
   position: absolute;
@@ -337,7 +361,7 @@ const PrevWatchUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;
@@ -357,7 +381,7 @@ const PrevWatchLi = styled.li`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: transparent;
-  color: black;
+  color: var(--fontBlack);
 `;
 
 const PrevWatchAnchor = styled(Link)`
@@ -401,7 +425,7 @@ const InterestedGameUl = styled.ul`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--colorWhite);
   z-index: -1;
   transform: translateX(-100%);
   transition: all 0.5s;
