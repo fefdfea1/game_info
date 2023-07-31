@@ -1,7 +1,6 @@
 import { appFireStore } from "../../common/fireBaseSettion";
 import {
   doc,
-  setDoc,
   getDoc,
   collection,
   getDocs,

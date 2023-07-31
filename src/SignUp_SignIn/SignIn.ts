@@ -29,7 +29,6 @@ export const SignIn: propsType = (email, passwords, navigate) => {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorMessage);
     });
 };
 
@@ -37,7 +36,7 @@ export const OauthSignIn = (navigate: any) => {
   const provider = new GoogleAuthProvider(); // provider 구글 설정
   signInWithPopup(appAuth, provider) // 팝업창 띄워서 로그인
     .then((data) => {
-      navigate("/"); // console에 UserCredentialImpl 출력
+      navigate("/");
     })
     .catch((err) => {
       console.log(err);

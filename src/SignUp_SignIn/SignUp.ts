@@ -6,7 +6,7 @@ import {
 import { appAuth } from "../common/fireBaseSettion";
 import { NavigateFunction } from "react-router-dom";
 import { appFireStore, Provider } from "../common/fireBaseSettion";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 const noProfileImg =
   "https://firebasestorage.googleapis.com/v0/b/for-gamer-f55df.appspot.com/o/noProfileImg%2F%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png?alt=media&token=3c09cb03-28fb-4b5a-be4e-59dd53a63408";
 export const SignUp = async (
@@ -39,29 +39,10 @@ export const SignUp = async (
 };
 
 export const OauthSignUp = (
-  event: React.FormEvent<HTMLFormElement>,
+  event: React.MouseEvent<HTMLButtonElement>,
   navigate: NavigateFunction
 ) => {
   event.preventDefault();
-  const target = event.target as HTMLElement;
-  const password = target.childNodes[1] as HTMLInputElement;
-  const passWordcheck = target.childNodes[2] as HTMLInputElement;
-  const userName = target.childNodes[3] as HTMLInputElement;
-  const passwordValue = password.value;
-  const passWordcheckValue = passWordcheck.value;
-  const userNameValue = userName.value;
-  const passwordsRegExp =
-    /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
-  if (passwordValue !== passWordcheckValue) {
-    alert("비밀번호가 일치하지 않습니다");
-    return;
-  }
-  if (!passwordsRegExp.test(passwordValue)) {
-    alert(
-      "비밀번호는 8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합해야합니다."
-    );
-    return;
-  }
   signInWithPopup(appAuth, Provider)
     .then(async (result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -69,13 +50,14 @@ export const OauthSignUp = (
         const googleUserInfo = result.user;
         const userEmail = googleUserInfo.email;
         const userUid = googleUserInfo.uid;
+        const userName = googleUserInfo.displayName;
         if (userEmail !== null) {
           const data = await getDoc(doc(appFireStore, "userInfo", userUid));
           const parse = data.data();
           if (!parse) {
             await setDoc(doc(appFireStore, "userInfo", userUid), {
               userEmail: userEmail,
-              userName: userNameValue,
+              userName: userName,
               userProfileImg: noProfileImg,
               userUid: userUid,
             });

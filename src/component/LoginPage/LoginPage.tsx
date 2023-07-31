@@ -135,11 +135,11 @@ export default function LoginPage() {
                 <GoogleLogin
                   type="button"
                   onClick={(event) => {
-                    navigate("/OauthSignUp");
+                    OauthSignUp(event, navigate);
                   }}
                 >
                   <GoogleIconPosition />
-                  google 로그인
+                  google계정으로 회원가입
                 </GoogleLogin>
                 <LoginButton>회원가입</LoginButton>
               </form>
@@ -450,16 +450,24 @@ const GoogleLogin = styled.button`
     background-color: #999;
     color: var(--colorWhite);
   }
+
+  @media (max-width: 900px) {
+    font-size: 15px;
+  }
 `;
 
 const GoogleIconPosition = styled(AiOutlineGoogle)`
   position: absolute;
   top: 55%;
-  left: 28%;
+  left: 19%;
   transform: translate(-50%, -50%);
   width: 30px;
   height: 30px;
-  color: vaR(--fontGray);
+  color: var(--fontGray);
+
+  @media (max-width: 900px) {
+    left: 17%;
+  }
 `;
 
 const ResetPassowrd = styled.div`
