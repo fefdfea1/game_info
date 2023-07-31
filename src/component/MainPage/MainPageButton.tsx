@@ -19,6 +19,7 @@ const setLocalStorage = (
     .childNodes[0] as HTMLElement;
   const imgTag = imgBox.childNodes[0] as HTMLImageElement;
   const imgSrc = imgTag.src;
+  const Ptag = target.childNodes[0] as HTMLParagraphElement;
   const setData = {
     imgSrc,
     title: innerText,
@@ -42,8 +43,10 @@ const setLocalStorage = (
     } else {
       localStorage.setItem("addGameData", JSON.stringify([setData]));
     }
+    Ptag.innerText = "추가완료";
   } else {
     if (getData !== null) {
+      Ptag.innerText = "추가하기";
       const parseData: addGameDataType[] = JSON.parse(getData);
       const removeData = parseData.filter((item) => item.gameId !== gameId);
       target.classList.remove("Active");
