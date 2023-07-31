@@ -43,6 +43,7 @@
 - @types/react-slick
 - typescript
 - react-youtube
+
 위와 같이 사용하였습니다 위에서 부터 차례대로 사용이유를 설명해보자면
 
 ### emotion, emotion/styled
