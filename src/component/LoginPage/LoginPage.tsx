@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { SignUp, OauthSignUp } from "../../SignUp_SignIn/SignUp";
 import { AiOutlineGoogle } from "react-icons/ai";
-import { SignIn } from "../../SignUp_SignIn/SignIn";
+import { OauthSignIn, SignIn } from "../../SignUp_SignIn/SignIn";
 import BackToMainButton from "../backToMain/BackToMainButton";
 import { ChangePassWord } from "../../SignUp_SignIn/ChangePassword";
 
@@ -97,6 +97,15 @@ export default function LoginPage() {
                 <UserInput placeholder="이메일 입력" type="email" />
                 <UserInput placeholder="패스워드 입력" type="password" />
                 <LoginButton>로그인</LoginButton>
+                <GoogleLogin
+                  type="button"
+                  onClick={(event) => {
+                    OauthSignIn(navigate);
+                  }}
+                >
+                  <GoogleIconPosition />
+                  google 로그인
+                </GoogleLogin>
                 <ForgotPassword
                   type="button"
                   onClick={() => {
@@ -126,7 +135,7 @@ export default function LoginPage() {
                 <GoogleLogin
                   type="button"
                   onClick={(event) => {
-                    OauthSignUp(event, "1004ff", navigate);
+                    navigate("/OauthSignUp");
                   }}
                 >
                   <GoogleIconPosition />
@@ -328,6 +337,7 @@ const ForgotPassword = styled.button`
   font-weight: 600;
   color: var(--colorBlack);
   background-color: transparent;
+  margin-top: 30px;
   cursor: pointer;
 `;
 

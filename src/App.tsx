@@ -6,6 +6,7 @@ import Main from "./Main";
 import Detailpage from "./component/DetailPage/Detailpage";
 import LoginPage from "./component/LoginPage/LoginPage";
 import UserSetting from "./component/PersonalSetting/UserSetting";
+import OauthSigUp from "./SignUp_SignIn/OauthSigUp";
 
 export type initType = {
   page: number;
@@ -64,6 +65,7 @@ function App() {
         <Route path="/detail/:id" element={<Detailpage />} />
         <Route path="/LoginPage" element={<LoginPage />} />
         <Route path="/UserSetting" element={<UserSetting />} />
+        <Route path="/OauthSignUp" element={<OauthSigUp />}></Route>
       </Routes>
     </Provider>
   );

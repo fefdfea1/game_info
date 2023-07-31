@@ -45,7 +45,7 @@ const subMithandler = async (
     const reg = /[()]/g;
     const emailRegExp =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    var nameRegExp = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣a-zA-Z].{3,16}$/; // 닉네임 한글 or 영어만
+    var nameRegExp = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣a-zA-Z].{2,16}$/; // 닉네임 한글 or 영어만
 
     const email = appAuth.currentUser.email;
     const changeEmail = PreviewEmail.current?.innerText.replace(reg, "");
@@ -66,12 +66,17 @@ const subMithandler = async (
           if (PreviewImgInput.current.files) {
             const imageRef = ref(storage, `${appAuth.currentUser?.uid}`);
             const upLoadImage = PreviewImgInput.current.files[0];
+            const currentUserUid = appAuth.currentUser.uid;
             if (upLoadImage) {
               if (!imageRef) return;
               uploadBytes(imageRef, upLoadImage).then((snapShot) => {
                 getDownloadURL(snapShot.ref)
                   .then(async (url) => {
-                    const userDoc = doc(appFireStore, "userInfo", email);
+                    const userDoc = doc(
+                      appFireStore,
+                      "userInfo",
+                      currentUserUid
+                    );
                     await updateDoc(userDoc, {
                       userEmail: changeEmail,
                       userName: changeName,
@@ -85,7 +90,7 @@ const subMithandler = async (
                   });
               });
             } else {
-              const userDoc = doc(appFireStore, "userInfo", email);
+              const userDoc = doc(appFireStore, "userInfo", currentUserUid);
               await updateDoc(userDoc, {
                 userEmail: changeEmail,
                 userName: changeName,
@@ -124,7 +129,6 @@ export default function UserSetting() {
           const docRef = doc(appFireStore, "userInfo", userUid);
           const docSnap = await getDoc(docRef);
           const getUserInfo = docSnap.data();
-          console.log(PreviewName);
           if (
             profileImgRef.current &&
             UserEmailRef.current &&
@@ -134,7 +138,6 @@ export default function UserSetting() {
             PreviewEmail.current &&
             PreviewName.current
           ) {
-            console.log("sdfsd");
             profileImgRef.current.src = getUserInfo.userProfileImg;
             UserEmailRef.current.value = userEmail;
             UserNameRef.current.innerText = getUserInfo.userName;
