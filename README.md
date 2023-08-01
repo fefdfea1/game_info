@@ -39,7 +39,7 @@
 - firebase
 - http-proxy-middleware
 - redux
-- slick-carousel
+- react-slick
 - @types/react-slick
 - typescript
 - react-youtube
