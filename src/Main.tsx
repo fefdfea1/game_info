@@ -6,7 +6,7 @@ import MainPageVideo from "./component/MainPage/MainPageVideo";
 import { useState, useEffect } from "react";
 import { retrunDataType } from "./dataFetch/getGameData";
 import { onAuthStateChanged } from "firebase/auth";
-import { appAuth } from "./common/fireBaseSettion";
+import { appAuth } from "./common/fireBaseSetting";
 
 export default function Main() {
   const [searchData, setSearch] = useState<retrunDataType[]>([]);

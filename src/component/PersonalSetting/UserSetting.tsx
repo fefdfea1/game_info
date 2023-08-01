@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { appAuth, appFireStore, storage } from "../../common/fireBaseSettion";
+import { appAuth, appFireStore, storage } from "../../common/fireBaseSetting";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import BackToMainButton from "../backToMain/BackToMainButton";

@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { appAuth } from "../common/fireBaseSettion";
+import { appAuth } from "../common/fireBaseSetting";
 
 type propsType = (
   email: string,

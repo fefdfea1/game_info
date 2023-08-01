@@ -1,4 +1,4 @@
-import { appFireStore } from "../../common/fireBaseSettion";
+import { appFireStore } from "../../common/fireBaseSetting";
 import {
   doc,
   getDoc,
@@ -9,7 +9,7 @@ import {
   addDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { appAuth } from "../../common/fireBaseSettion";
+import { appAuth } from "../../common/fireBaseSetting";
 import { CommentType } from "./Detailpage";
 
 export const createComment = (

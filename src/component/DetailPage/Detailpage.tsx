@@ -10,7 +10,7 @@ import { getGameInfo } from "./getDetailGameInfo";
 import { useEffect, useState, useRef } from "react";
 import { makeChart } from "./paintCircleCart";
 import { createComment, getCommentData, removeComment } from "./CommentScript";
-import { appAuth } from "../../common/fireBaseSettion";
+import { appAuth } from "../../common/fireBaseSetting";
 type gameInfoType = {
   metaCritic: number;
   first_release_date: string;

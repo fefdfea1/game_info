@@ -1,4 +1,4 @@
-import { appAuth } from "../common/fireBaseSettion";
+import { appAuth } from "../common/fireBaseSetting";
 import { signOut } from "firebase/auth";
 
 export const LogOut = () => {

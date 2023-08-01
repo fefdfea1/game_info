@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
-import { appAuth, appFireStore } from "../../common/fireBaseSettion";
+import { appAuth, appFireStore } from "../../common/fireBaseSetting";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
