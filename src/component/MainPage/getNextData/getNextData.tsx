@@ -7,7 +7,7 @@ import {
   containPcPlatforms,
   containPsPlatform,
   containXboxPlatform,
-} from "../dataFetch/getGameData";
+} from "../../../dataFetch/getGameData";
 import { RiSwitchLine, RiXboxLine } from "react-icons/ri";
 import { SiOculus, SiPlaystation4, SiPlaystation5 } from "react-icons/si";
 import { FaLinux } from "react-icons/fa";
@@ -73,6 +73,7 @@ export const getNextData: getNextDataType = async (
         );
       }
     );
+    console.log(filterData);
     filterDataArr = filterData;
   };
 
@@ -128,6 +129,7 @@ export const getNextData: getNextDataType = async (
       gameId.push(item.game.toString());
     });
     getSearchData = await gamesearch(gameId.join(","));
+    console.log(getSearchData);
   } else if (type === "sortRating") {
     const nextData = await sortRatingData(UnixTime - 315532800, page, limit);
     getSearchData = nextData;

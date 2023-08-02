@@ -34,16 +34,17 @@ export default function Slider(props: porpsType) {
             setSortState={props.setSortState}
           />
         )}
-        <SlideActiveButtonBox
+        <SlideActiveButtonSvgBox
+          type="button"
           onClick={() => {
             setClickStatus(!buttonClick);
           }}
         >
-          <SlideActiveButton
+          <SlideActiveButtonSvg
             style={{ pointerEvents: "none" }}
             className={`${buttonClick === true ? "buttonActive" : null}`}
           />
-        </SlideActiveButtonBox>
+        </SlideActiveButtonSvgBox>
       </SlideContainer>
     </>
   );
@@ -117,7 +118,7 @@ const SliderLogo = styled.h2`
   transform: translateX(-50%);
 `;
 
-const SlideActiveButtonBox = styled.button`
+const SlideActiveButtonSvgBox = styled.button`
   width: 30px;
   height: 50px;
   background-color: var(--colorWhite);
@@ -131,7 +132,7 @@ const SlideActiveButtonBox = styled.button`
   cursor: pointer;
 `;
 
-const SlideActiveButton = styled.div`
+const SlideActiveButtonSvg = styled.div`
   width: 20px;
   height: 20px;
   transform: rotate(45deg);

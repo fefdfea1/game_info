@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { SignUp, OauthSignUp } from "../../SignUp_SignIn/SignUp";
+import { SignUp, OauthSignUp } from "./SignUp_SignIn/SignUp";
 import { AiOutlineGoogle } from "react-icons/ai";
-import { OauthSignIn, SignIn } from "../../SignUp_SignIn/SignIn";
+import { OauthSignIn, SignIn } from "./SignUp_SignIn/SignIn";
 import BackToMainButton from "../backToMain/BackToMainButton";
-import { ChangePassWord } from "../../SignUp_SignIn/ChangePassword";
+import { ChangePassWord } from "./SignUp_SignIn/ChangePassword";
 
 const SignUpsubMitEventHandler = (
   event: React.FormEvent<HTMLFormElement>,

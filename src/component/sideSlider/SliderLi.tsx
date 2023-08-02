@@ -8,7 +8,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Dispatch, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, initType, pageUp, cachData, changeType } from "../../App";
-import { getNextData } from "../../getNextData/getNextData";
+import { getNextData } from "../MainPage/getNextData/getNextData";
 import { AnyAction } from "redux";
 import { getDataType } from "../MainPage/MainPageVideo";
 import { retrunDataType } from "../../dataFetch/getGameData";

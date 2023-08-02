@@ -10,7 +10,7 @@ import { appAuth } from "./common/fireBaseSetting";
 
 export default function Main() {
   const [searchData, setSearch] = useState<retrunDataType[]>([]);
-  const [changeSortStaet, setSortState] = useState<boolean>(false);
+  const [changeSortState, setSortState] = useState<boolean>(false);
   const [loginState, setLoginState] = useState<boolean>(false);
   useEffect(() => {
     onAuthStateChanged(appAuth, (user) => {
@@ -23,7 +23,7 @@ export default function Main() {
   });
 
   return (
-    <Container className="container">
+    <Container className={`${changeSortState ? "blind" : null}`}>
       {loginState ? <Header /> : <LogOutHeader />}
       <Slider
         setSearch={setSearch}
@@ -31,8 +31,8 @@ export default function Main() {
         LoginState={loginState}
       />
       <MainPageVideo searchData={searchData} setSearch={setSearch} />
-      {changeSortStaet && (
-        <ChangeDataLoading className={`${changeSortStaet ? "active" : null}`}>
+      {changeSortState && (
+        <ChangeDataLoading className={`${changeSortState ? "active" : null}`}>
           <Spinner />
         </ChangeDataLoading>
       )}
@@ -46,6 +46,11 @@ const Container = styled.div`
   position: relative;
   background-color: var(--backgroundColor);
   &.hideChangeSort {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  &.blind {
     height: 100vh;
     overflow: hidden;
   }

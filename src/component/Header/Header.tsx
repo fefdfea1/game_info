@@ -5,7 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { LogOut } from "../../SignUp_SignIn/LogOut";
+import { LogOut } from "../LoginPage/SignUp_SignIn/LogOut";
 import { search } from "./search";
 
 export type searchDataType = {
@@ -82,7 +82,7 @@ export default function Header() {
             search(event, searchInput, setData, setBackgroundClickState);
           }}
         />
-        <SvgBox>
+        <SvgBox type="submit">
           <FaSearch style={{ width: "30px", height: "30px", fill: "#fff" }} />
         </SvgBox>
         {backgroundClick && getSearchData.length > 0 ? (

@@ -5,6 +5,7 @@ import { appAuth, appFireStore, storage } from "../../common/fireBaseSetting";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import BackToMainButton from "../backToMain/BackToMainButton";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const changeProfile = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -37,8 +38,8 @@ const subMithandler = async (
   event: React.FormEvent<HTMLFormElement>,
   PreviewEmail: React.RefObject<HTMLParagraphElement>,
   PreviewName: React.RefObject<HTMLParagraphElement>,
-  PreviewProfile: React.RefObject<HTMLImageElement>,
-  PreviewImgInput: React.RefObject<HTMLInputElement>
+  PreviewImgInput: React.RefObject<HTMLInputElement>,
+  navigate: NavigateFunction
 ) => {
   event.preventDefault();
   if (appAuth.currentUser) {
@@ -61,12 +62,14 @@ const subMithandler = async (
       PreviewImgInput.current &&
       changeEmail
     ) {
+      //이미지를 업로드 하였을시 alert가 나온다음 이동하는 순서를 지키도록
+      // navigate를 2번 사용함
       if (changeName !== "") {
         if (emailRegExp.test(changeEmail) && nameRegExp.test(changeName)) {
           if (PreviewImgInput.current.files) {
-            const imageRef = ref(storage, `${appAuth.currentUser?.uid}`);
             const upLoadImage = PreviewImgInput.current.files[0];
             const currentUserUid = appAuth.currentUser.uid;
+            const imageRef = ref(storage, `ProfileImg/${currentUserUid}`);
             if (upLoadImage) {
               if (!imageRef) return;
               uploadBytes(imageRef, upLoadImage).then((snapShot) => {
@@ -83,6 +86,7 @@ const subMithandler = async (
                       userProfileImg: url,
                     });
                     alert("변경이 완료되었습니다");
+                    navigate("/");
                   })
                   .catch((err) => {
                     const ErrorMessage = err.message;
@@ -95,7 +99,9 @@ const subMithandler = async (
                 userEmail: changeEmail,
                 userName: changeName,
               });
+
               alert("변경이 완료되었습니다");
+              navigate("/");
             }
           }
         } else {
@@ -120,6 +126,7 @@ export default function UserSetting() {
   const PreviewImgInput = useRef<HTMLInputElement>(null);
   const [emailValue, setEmailValue] = useState<string>("");
   const [changeName, setName] = useState<string>("");
+  const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(appAuth, async (user) => {
       if (user) {
@@ -165,8 +172,8 @@ export default function UserSetting() {
               event,
               PreviewEmail,
               PreviewName,
-              PreviewImg,
-              PreviewImgInput
+              PreviewImgInput,
+              navigate
             );
           }}
         >

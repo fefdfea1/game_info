@@ -3,9 +3,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { appAuth } from "../common/fireBaseSetting";
+import { appAuth } from "../../../common/fireBaseSetting";
 import { NavigateFunction } from "react-router-dom";
-import { appFireStore, Provider } from "../common/fireBaseSetting";
+import { appFireStore, Provider } from "../../../common/fireBaseSetting";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 const noProfileImg =
   "https://firebasestorage.googleapis.com/v0/b/for-gamer-f55df.appspot.com/o/noProfileImg%2F%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png?alt=media&token=3c09cb03-28fb-4b5a-be4e-59dd53a63408";

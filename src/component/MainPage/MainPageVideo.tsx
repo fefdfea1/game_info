@@ -4,10 +4,11 @@ import { retrunDataType } from "../../dataFetch/getGameData";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, cachData, pageUp } from "../../App";
-import { getNextData } from "../../getNextData/getNextData";
+import { getNextData } from "./getNextData/getNextData";
 import { IconType } from "react-icons";
 import MainPageButton from "./MainPageButton";
 import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
+import ShowScreenShot from "./ShowScreenShot";
 
 export interface getDataType {
   returnData: retrunDataType[];
@@ -200,7 +201,9 @@ export default function MainPageVideo(props: propsType) {
                   }}
                 >
                   <VideoBox className="videoBox">
-                    {OverState && index === OverDomIndex ? (
+                    {OverState &&
+                    index === OverDomIndex &&
+                    item.videos !== "null" ? (
                       <YoutubeVideoPlayer
                         item={item}
                         index={index}
@@ -208,7 +211,15 @@ export default function MainPageVideo(props: propsType) {
                         OverDomIndex={OverDomIndex}
                         coverImgBox={coverImgBox}
                       />
-                    ) : null}
+                    ) : (
+                      <ShowScreenShot
+                        item={item}
+                        index={index}
+                        OverState={OverState}
+                        OverDomIndex={OverDomIndex}
+                        coverImgBox={coverImgBox}
+                      />
+                    )}
                     {item.cover !== "null" ? (
                       <CoverImgBox className="coverImgBox" ref={coverImgBox}>
                         <CoverImg
