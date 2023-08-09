@@ -179,35 +179,31 @@ export default function Detailpage() {
             return (
               <>
                 {userUid === item.uid ? (
-                  <>
-                    <CommentArea data-Id={item.id}>
-                      <div>
-                        <p>{item.name}</p>
-                        <p>{item.Comment}</p>
-                      </div>
-                      <DeleteComment
-                        onClick={(event) => {
-                          removeComment(
-                            event,
-                            location,
-                            setCommentList,
-                            CommentList
-                          );
-                        }}
-                      >
-                        X
-                      </DeleteComment>
-                    </CommentArea>
-                  </>
+                  <CommentArea data-id={item.id} key={`${item.id}`}>
+                    <div>
+                      <p>{item.name}</p>
+                      <p>{item.Comment}</p>
+                    </div>
+                    <DeleteComment
+                      onClick={(event) => {
+                        removeComment(
+                          event,
+                          location,
+                          setCommentList,
+                          CommentList
+                        );
+                      }}
+                    >
+                      X
+                    </DeleteComment>
+                  </CommentArea>
                 ) : (
-                  <>
-                    <CommentArea data-Id={item.id}>
-                      <div>
-                        <p>{item.name}</p>
-                        <p>{item.Comment}</p>
-                      </div>
-                    </CommentArea>
-                  </>
+                  <CommentArea data-id={item.id}>
+                    <div>
+                      <p>{item.name}</p>
+                      <p>{item.Comment}</p>
+                    </div>
+                  </CommentArea>
                 )}
               </>
             );
@@ -215,13 +211,12 @@ export default function Detailpage() {
         </SidecommentBox>
       </SubMitButotnPositionBox>
       <SlideContainer {...settings}>
-        {screenAndVideosArray.map((item, index) => {
+        {screenAndVideosArray.map((item) => {
           return (
             <>
               {item.slice(0, 8) === "videoUrl" ? (
-                <SlideItem key={index}>
+                <SlideItem key={`${item}`}>
                   <YouTubeVideo
-                    key={`${item}`}
                     videoId={`${item.slice(8)}`}
                     className="video"
                     opts={{
@@ -529,10 +524,11 @@ const SmallCircle = styled.p`
   }
 `;
 
-const Description = styled.p`
+const Description = styled.span`
   position: absolute;
   top: -78px;
   left: 50%;
+  display: block;
   transform: translate(-50%, -50%);
   color: var(--fontWhite);
   font-size: 25px;
@@ -564,7 +560,8 @@ const AboutBox = styled.div`
   position: relative;
 `;
 
-const DescriptionTitle = styled.p`
+const DescriptionTitle = styled.span`
+  display: block;
   font-size: 40px;
   font-weight: bold;
 `;
@@ -593,7 +590,7 @@ const DetailInfoBox = styled.div`
   line-height: 1.8;
   margin-top: 40px;
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0;
   }
 `;
@@ -617,8 +614,9 @@ const GameDetailRight = styled.div`
   width: 50%;
 `;
 
-const GameDescription = styled.p`
+const GameDescription = styled.span`
   width: 100%;
+  display: block;
   line-height: 1.5;
   font-size: 20px;
   text-overflow: ellipsis;

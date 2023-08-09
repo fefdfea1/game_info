@@ -173,6 +173,7 @@ export default function LogOutSliderLi(props: sliderPropsType) {
   return (
     <SlideUl>
       {data.map((item, index) => {
+        console.log(item);
         return (
           <SlideItems
             data-num={index}
