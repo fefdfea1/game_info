@@ -26,7 +26,6 @@ export const search: propsType = (
       timeId = setTimeout(async () => {
         timeId = null;
         const data = await searchGame(inputValue, limit);
-        console.log(data);
         setData(data);
       }, 300);
     }

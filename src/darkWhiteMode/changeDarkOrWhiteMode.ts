@@ -1,11 +1,9 @@
 export const changeMode = (target: HTMLLIElement) => {
   if (target.classList.contains("dark")) {
-    console.log(" 실행");
     target.classList.add("whiteMode");
     target.classList.remove("dark");
     changeWhiteMode();
   } else {
-    console.log(" 실행");
     target.classList.remove("whiteMode");
     target.classList.add("dark");
     changeDarkMode();

@@ -32,7 +32,7 @@ export const SignIn: propsType = (email, passwords, navigate) => {
     });
 };
 
-export const OauthSignIn = (navigate: any) => {
+export const OauthSignIn = (navigate: NavigateFunction) => {
   const provider = new GoogleAuthProvider(); // provider 구글 설정
   setPersistence(appAuth, browserSessionPersistence)
     .then(() => {

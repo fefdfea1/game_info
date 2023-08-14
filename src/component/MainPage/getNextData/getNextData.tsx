@@ -78,28 +78,30 @@ export const getNextData: getNextDataType = async (
       switch (data) {
         case "Linux":
           IconBox.push("FaLinux");
-          break;
+          return;
         case "PC (Microsoft Windows)":
           IconBox.push("AiOutlineWindows");
-          break;
+          return;
         case "Mac":
           IconBox.push("AiOutlineApple");
-          break;
+          return;
         case "PlayStation 4":
           IconBox.push("SiPlaystation4");
-          break;
+          return;
         case "Nintendo Switch":
           IconBox.push("RiSwitchLine");
-          break;
+          return;
         case "PlayStation 5":
           IconBox.push("SiPlaystation5");
-          break;
+          return;
         case "Xbox Series X|S":
           IconBox.push("RiXboxLine");
-          break;
-        case "Meta Quest 2":
+          return;
+        case "Oculus":
           IconBox.push("SiOculus");
-          break;
+          return;
+        default:
+          return null;
       }
     });
     return IconBox;

@@ -10,10 +10,7 @@ import MainPageButton from "./MainPageButton";
 import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
 import ShowScreenShot from "./ShowScreenShot";
 import LoadingSpinner from "./LoadingSpinner";
-import { RiSwitchLine, RiXboxLine } from "react-icons/ri";
-import { SiOculus, SiPlaystation4, SiPlaystation5 } from "react-icons/si";
-import { FaLinux } from "react-icons/fa";
-import { AiOutlineApple, AiOutlineWindows } from "react-icons/ai";
+import { changeSvg } from "./changeSvg";
 
 export interface getDataType {
   returnData: retrunDataType[];
@@ -134,34 +131,7 @@ export default function MainPageVideo(props: propsType) {
       //기존의 아이콘 이름만 가져와 매칭되는 아이콘이름을 태그로 다시 반환
       const updatedGameData = selector.gameData.map((item) => {
         const changePlatformTag = item.platforms.map((platForm) => {
-          switch (platForm) {
-            case "FaLinux":
-              return <FaLinux style={{ width: "24px", height: "24px" }} />;
-            case "AiOutlineWindows":
-              return (
-                <AiOutlineWindows style={{ width: "24px", height: "24px" }} />
-              );
-            case "AiOutlineApple":
-              return (
-                <AiOutlineApple style={{ width: "24px", height: "24px" }} />
-              );
-            case "SiPlaystation4":
-              return (
-                <SiPlaystation4 style={{ width: "24px", height: "24px" }} />
-              );
-            case "RiSwitchLine":
-              return <RiSwitchLine style={{ width: "24px", height: "24px" }} />;
-            case "SiPlaystation5":
-              return (
-                <SiPlaystation5 style={{ width: "24px", height: "24px" }} />
-              );
-            case "RiXboxLine":
-              return <RiXboxLine style={{ width: "24px", height: "24px" }} />;
-            case "SiOculus":
-              return <SiOculus style={{ width: "24px", height: "24px" }} />;
-            default:
-              return null;
-          }
+          return changeSvg(platForm);
         });
 
         return {
@@ -214,10 +184,23 @@ export default function MainPageVideo(props: propsType) {
       selector.limit,
       selector.nowDataType
     );
-
+    const copyData: retrunDataType[] = JSON.parse(JSON.stringify(returnData));
     if (returnData.length >= 1) {
-      const newData = [...props.searchData, ...returnData];
-      props.setSearch(newData);
+      const updatedGameData = copyData.map((item) => {
+        const changePlatformTag = item.platforms.map((platForm) => {
+          return changeSvg(platForm);
+        });
+
+        return {
+          ...item,
+          platforms: changePlatformTag,
+        };
+      });
+
+      const newData = [...selector.gameData, ...returnData];
+      const settingData = [...props.searchData, ...updatedGameData];
+
+      props.setSearch(settingData);
       dispatch(cachData(newData));
       dispatch(pageUp(page));
     }
@@ -273,12 +256,9 @@ export default function MainPageVideo(props: propsType) {
                         {OverState &&
                         OverDomIndex === index &&
                         item.videos !== "null" ? (
-                          <LoadingSpinner
-                            ref={getTarget}
-                            position="absolute"
-                            top="0"
-                            left="0"
-                          />
+                          <LoadingSpinnerDom>
+                            <Spinner />
+                          </LoadingSpinnerDom>
                         ) : null}
                       </CoverImgBox>
                     ) : (
@@ -464,5 +444,39 @@ const PlatformArea = styled.span`
   margin-right: 10px;
   &:last-child {
     margin-right: 0;
+  }
+`;
+
+//props로 분리하면 다음 게임 저오를 불러올 수 없는 오류가 발생해 따로 뺌
+
+const LoadingSpinnerDom = styled.div`
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+`;
+
+const Spinner = styled.div`
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 5px solid #ccc;
+  border-top-color: #888;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
