@@ -349,7 +349,7 @@ const ShowPrevViewSpan = styled.span`
   margin-left: 6px;
   font-size: 13px;
 
-  &:first-child {
+  &:first-of-type {
     margin-left: 0;
   }
 `;
@@ -388,7 +388,7 @@ const EditUserInfo = styled.input`
     color: var(--fontBlack);
   }
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0;
   }
 `;

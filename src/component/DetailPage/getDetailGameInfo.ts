@@ -5,7 +5,6 @@ import { Unix_timestamp } from "./changeUnixTime";
 export const getGameInfo = async (location: any) => {
   const spliceLocation = location.pathname.slice(8);
   const getGameData = await gamesearch(spliceLocation);
-  console.log(getGameData);
   const filterData = filterOutData(getGameData);
   return filterData;
 };

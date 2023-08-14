@@ -38,6 +38,11 @@ const HeaderArea = styled.header`
   z-index: 999;
   background-color: var(--backgroundColor);
   box-sizing: border-box;
+
+  @media (max-width: 740px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 `;
 
 const HeaderLogo = styled.div`
@@ -48,6 +53,10 @@ const UserProfileBox = styled.div`
   display: flex;
   color: var(--colorWhite);
   cursor: pointer;
+
+  @media (max-width: 740px) {
+    font-size: 12px;
+  }
 `;
 
 const SearchBox = styled.form`
@@ -80,5 +89,12 @@ const UserSearch = styled.input`
   color: var(--userSearchFontColor);
   box-sizing: border-box;
   padding: 0 96px 0 26px;
-  margin-left: 73px;
+
+  @media (max-width: 1200px) {
+    width: 400px;
+  }
+
+  @media (max-width: 740px) {
+    width: 300px;
+  }
 `;

@@ -11,6 +11,8 @@ import { useEffect, useState, useRef } from "react";
 import { makeChart } from "./paintCircleCart";
 import { createComment, getCommentData, removeComment } from "./CommentScript";
 import { appAuth } from "../../common/fireBaseSetting";
+import LogOutHeader from "../Header/LogoutHeader";
+
 type gameInfoType = {
   metaCritic: number;
   first_release_date: string;
@@ -68,6 +70,7 @@ export default function Detailpage() {
   const [MoreButtonState, setMoreState] = useState<boolean>(false);
   const [CommentList, setCommentList] = useState<CommentType[]>([]);
   const [sliderButtonClick, setButtonState] = useState<boolean>(false);
+  const [loginState, setLoginState] = useState<boolean>(false);
   const location = useLocation();
   const CircleMetaCriticRef = useRef<HTMLDivElement>(null);
   const CircleUserRatingRef = useRef<HTMLDivElement>(null);
@@ -75,38 +78,24 @@ export default function Detailpage() {
   const desc = useRef<HTMLParagraphElement>(null);
   const userUid = appAuth.currentUser?.uid;
   useEffect(() => {
-    let metaTimeId: NodeJS.Timer;
-    let totalRatingTimeId: NodeJS.Timer;
     const getGameInfoAsync = async () => {
       const getGameData = await getGameInfo(location);
-      const metaCritic = getGameData.metaCritic;
-      const totalRating = Math.floor(getGameData.total_rating);
       setGameInfo(getGameData);
-      const timeId1 = makeChart(metaCritic, CircleMetaCriticRef, "red");
-      const timeId2 = makeChart(totalRating, CircleUserRatingRef, "yellow");
-      //2개중 하나만 있는 경우가 있어 따로 if문을 사용하여 검사
-      if (timeId1) {
-        metaTimeId = timeId1;
-      }
-      if (timeId2) {
-        totalRatingTimeId = timeId2;
-      }
-      if (getGameData.summary.length >= 400) {
-        setMoreState(true);
-      }
     };
 
     getGameInfoAsync();
 
     getCommentData(location, setCommentList);
-    return () => {
-      //사용자가 차트가 완전히 만들어지기 전에 뒤로가기를 하였을때를 위해
-      if (metaTimeId || totalRatingTimeId) {
-        clearInterval(metaTimeId);
-        clearInterval(totalRatingTimeId);
-      }
-    };
+
+    if (
+      sessionStorage.getItem(
+        "firebase:authUser:AIzaSyCUMbjm8n4Lo8xmhpYxYCBmncERqcgQ2aw:[DEFAULT]"
+      )
+    ) {
+      setLoginState(true);
+    }
   }, []);
+
   let screenAndVideosArray: string[] = [];
 
   if (DetailGameInfo) {
@@ -155,7 +144,7 @@ export default function Detailpage() {
 
   return (
     <Container>
-      <Header />
+      {loginState ? <Header /> : <LogOutHeader />}
       <SubMitButotnPositionBox className={sliderButtonClick ? "open" : "hide"}>
         <SidecommentBox>
           <SideActiveButton
@@ -175,12 +164,12 @@ export default function Detailpage() {
             <input type="text" />
             <SubMitButton type="submit">등록하기</SubMitButton>
           </WriteComment>
-          {CommentList.map((item) => {
-            return (
-              <>
-                {userUid === item.uid ? (
-                  <>
-                    <CommentArea data-Id={item.id}>
+          {CommentList &&
+            CommentList.map((item) => {
+              return (
+                <>
+                  {userUid === item.uid ? (
+                    <CommentArea data-id={item.id} key={`${item.id}`}>
                       <div>
                         <p>{item.name}</p>
                         <p>{item.Comment}</p>
@@ -198,30 +187,26 @@ export default function Detailpage() {
                         X
                       </DeleteComment>
                     </CommentArea>
-                  </>
-                ) : (
-                  <>
-                    <CommentArea data-Id={item.id}>
+                  ) : (
+                    <CommentArea data-id={item.id}>
                       <div>
                         <p>{item.name}</p>
                         <p>{item.Comment}</p>
                       </div>
                     </CommentArea>
-                  </>
-                )}
-              </>
-            );
-          })}
+                  )}
+                </>
+              );
+            })}
         </SidecommentBox>
       </SubMitButotnPositionBox>
       <SlideContainer {...settings}>
-        {screenAndVideosArray.map((item, index) => {
+        {screenAndVideosArray.map((item) => {
           return (
             <>
               {item.slice(0, 8) === "videoUrl" ? (
-                <SlideItem key={index}>
+                <SlideItem key={`${item}`}>
                   <YouTubeVideo
-                    key={`${item}`}
                     videoId={`${item.slice(8)}`}
                     className="video"
                     opts={{
@@ -529,10 +514,11 @@ const SmallCircle = styled.p`
   }
 `;
 
-const Description = styled.p`
+const Description = styled.span`
   position: absolute;
   top: -78px;
   left: 50%;
+  display: block;
   transform: translate(-50%, -50%);
   color: var(--fontWhite);
   font-size: 25px;
@@ -564,7 +550,8 @@ const AboutBox = styled.div`
   position: relative;
 `;
 
-const DescriptionTitle = styled.p`
+const DescriptionTitle = styled.span`
+  display: block;
   font-size: 40px;
   font-weight: bold;
 `;
@@ -593,7 +580,7 @@ const DetailInfoBox = styled.div`
   line-height: 1.8;
   margin-top: 40px;
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0;
   }
 `;
@@ -617,8 +604,9 @@ const GameDetailRight = styled.div`
   width: 50%;
 `;
 
-const GameDescription = styled.p`
+const GameDescription = styled.span`
   width: 100%;
+  display: block;
   line-height: 1.5;
   font-size: 20px;
   text-overflow: ellipsis;

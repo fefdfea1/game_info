@@ -12,7 +12,7 @@ import { AnyAction } from "redux";
 import { getDataType } from "../MainPage/MainPageVideo";
 import { retrunDataType } from "../../dataFetch/getGameData";
 import { setPrveRecordType } from "../MainPage/MainPageVideo";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { LogOut } from "../LoginPage/SignUp_SignIn/LogOut";
 import { changeMode } from "../../darkWhiteMode/changeDarkOrWhiteMode";
 
@@ -27,7 +27,8 @@ type clickEvnet = (
   event: React.MouseEvent<HTMLLIElement, MouseEvent>,
   props: sliderPropsType,
   setRecord: Dispatch<React.SetStateAction<setPrveRecordType[]>>,
-  setInterestedGame: Dispatch<React.SetStateAction<addGameDataType[]>>
+  setInterestedGame: Dispatch<React.SetStateAction<addGameDataType[]>>,
+  navigate: NavigateFunction
 ) => void;
 
 type secondClickEvnet = (
@@ -73,7 +74,13 @@ const prevWatchClickEvent = (
   }
 };
 
-const clickEvent: clickEvnet = (event, props, setRecord, setInterestedGame) => {
+const clickEvent: clickEvnet = (
+  event,
+  props,
+  setRecord,
+  setInterestedGame,
+  navigate
+) => {
   const target = event.target as HTMLLIElement;
   if (target.classList.contains("slidListItemActive")) {
     target.classList.remove("slidListItemActive");
@@ -97,7 +104,7 @@ const clickEvent: clickEvnet = (event, props, setRecord, setInterestedGame) => {
       changeMode(target);
       break;
     case 4:
-      LogOut();
+      LogOut(navigate);
       props.setClickListNumber(-1);
       break;
   }
@@ -169,6 +176,7 @@ export default function LogOutSliderLi(props: sliderPropsType) {
   const [InterestedGame, setInterestedGame] = useState<addGameDataType[]>([]);
   const select = useSelector((res: RootState) => res.counter1);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <SlideUl>
@@ -178,7 +186,7 @@ export default function LogOutSliderLi(props: sliderPropsType) {
             data-num={index}
             key={index}
             onClick={(event) => {
-              clickEvent(event, props, setRecord, setInterestedGame);
+              clickEvent(event, props, setRecord, setInterestedGame, navigate);
             }}
             className={`slideItem ${index === 3 ? "dark" : ""}`}
           >

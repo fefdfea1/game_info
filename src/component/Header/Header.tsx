@@ -4,7 +4,7 @@ import { appAuth, appFireStore } from "../../common/fireBaseSetting";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogOut } from "../LoginPage/SignUp_SignIn/LogOut";
 import { search } from "./search";
 
@@ -23,6 +23,7 @@ export default function Header() {
   const profileClickName = useRef<HTMLSpanElement>(null);
   const profileClickEmail = useRef<HTMLParagraphElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  const Navigate = useNavigate();
   const [clickUserProfile, setClickProfileState] = useState<boolean>(false);
   const [getSearchData, setData] = useState<searchDataType[]>([]);
   const [backgroundClick, setBackgroundClickState] = useState<boolean>(true);
@@ -89,7 +90,7 @@ export default function Header() {
           <SearchResultBox>
             {getSearchData.map((item) => {
               return (
-                <SearchLink to={`/detail/${item.id}`}>
+                <SearchLink to={`/detail/${item.id}`} key={item.id}>
                   <SearchCoverImgBox>
                     {item.cover !== undefined ? (
                       <SearchCoverImg
@@ -138,7 +139,13 @@ export default function Header() {
                   <MoveUserSetting to={"/UserSetting"}>
                     개인설정
                   </MoveUserSetting>
-                  <LogOutButotn onClick={LogOut}>로그아웃</LogOutButotn>
+                  <LogOutButotn
+                    onClick={() => {
+                      LogOut(Navigate);
+                    }}
+                  >
+                    로그아웃
+                  </LogOutButotn>
                 </SettingAndLogOutBox>
               </UserInfoBox>
             </UserProfileClick>
@@ -192,6 +199,11 @@ const UserProfile = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50px;
+
+  @media (max-width: 740px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const UserNameBox = styled.div`
@@ -203,6 +215,9 @@ const UserNameBox = styled.div`
 const UserName = styled.span`
   font-size: 17px;
   margin-left: 10px;
+  @media (max-width: 740px) {
+    font-size: 13px;
+  }
 `;
 
 const UserProfileClick = styled.div`
@@ -292,7 +307,6 @@ const UserSearch = styled.input`
   color: var(--userSearchFontColor);
   box-sizing: border-box;
   padding: 0 96px 0 26px;
-  margin-left: auto;
 
   @media (max-width: 1200px) {
     width: 400px;

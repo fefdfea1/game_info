@@ -8,10 +8,6 @@ import {
   containPsPlatform,
   containXboxPlatform,
 } from "../../../dataFetch/getGameData";
-import { RiSwitchLine, RiXboxLine } from "react-icons/ri";
-import { SiOculus, SiPlaystation4, SiPlaystation5 } from "react-icons/si";
-import { FaLinux } from "react-icons/fa";
-import { AiOutlineApple, AiOutlineWindows } from "react-icons/ai";
 
 export type sortGameTpye = {
   category: number;
@@ -73,7 +69,6 @@ export const getNextData: getNextDataType = async (
         );
       }
     );
-    console.log(filterData);
     filterDataArr = filterData;
   };
 
@@ -82,41 +77,31 @@ export const getNextData: getNextDataType = async (
     platformData.forEach((data) => {
       switch (data) {
         case "Linux":
-          IconBox.push(<FaLinux style={{ width: "30px", height: "30px" }} />);
-          break;
+          IconBox.push("FaLinux");
+          return;
         case "PC (Microsoft Windows)":
-          IconBox.push(
-            <AiOutlineWindows style={{ width: "30px", height: "30px" }} />
-          );
-          break;
+          IconBox.push("AiOutlineWindows");
+          return;
         case "Mac":
-          IconBox.push(
-            <AiOutlineApple style={{ width: "30px", height: "30px" }} />
-          );
-          break;
+          IconBox.push("AiOutlineApple");
+          return;
         case "PlayStation 4":
-          IconBox.push(
-            <SiPlaystation4 style={{ width: "30px", height: "30px" }} />
-          );
-          break;
+          IconBox.push("SiPlaystation4");
+          return;
         case "Nintendo Switch":
-          IconBox.push(
-            <RiSwitchLine style={{ width: "30px", height: "30px" }} />
-          );
-          break;
+          IconBox.push("RiSwitchLine");
+          return;
         case "PlayStation 5":
-          IconBox.push(
-            <SiPlaystation5 style={{ width: "30px", height: "30px" }} />
-          );
-          break;
+          IconBox.push("SiPlaystation5");
+          return;
         case "Xbox Series X|S":
-          IconBox.push(
-            <RiXboxLine style={{ width: "30px", height: "30px" }} />
-          );
-          break;
-        case "Meta Quest 2":
-          IconBox.push(<SiOculus style={{ width: "30px", height: "30px" }} />);
-          break;
+          IconBox.push("RiXboxLine");
+          return;
+        case "Oculus":
+          IconBox.push("SiOculus");
+          return;
+        default:
+          return null;
       }
     });
     return IconBox;
@@ -129,7 +114,6 @@ export const getNextData: getNextDataType = async (
       gameId.push(item.game.toString());
     });
     getSearchData = await gamesearch(gameId.join(","));
-    console.log(getSearchData);
   } else if (type === "sortRating") {
     const nextData = await sortRatingData(UnixTime - 315532800, page, limit);
     getSearchData = nextData;

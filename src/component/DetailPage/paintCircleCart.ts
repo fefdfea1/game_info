@@ -16,7 +16,11 @@ export const makeChart = (score: any, refObject: any, color: any) => {
 };
 
 const colorfn = (i: number, refObject: HTMLDivElement, color: string) => {
-  refObject.style.background = `conic-gradient(${color} 0% ${i}%, #dedede ${i}% 100%`;
+  if (refObject) {
+    refObject.style.background = `conic-gradient(${color} 0% ${i}%, #dedede ${i}% 100%`;
+  } else {
+    return;
+  }
 };
 
 const noneValue = (refObject: HTMLDivElement) => {
